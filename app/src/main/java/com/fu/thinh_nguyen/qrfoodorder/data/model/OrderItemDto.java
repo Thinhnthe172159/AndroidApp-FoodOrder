@@ -1,28 +1,54 @@
 package com.fu.thinh_nguyen.qrfoodorder.data.model;
 
 public class OrderItemDto {
-    private int id;
-    private int orderId;
-    private int menuItemId;
-    private int quantity;
-    private double unitPrice;
+    private Integer menuItemId;
     private String menuItemName;
+    private int quantity;
+    private String note;
+    private Double price;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Constructors
+    public OrderItemDto() {
+    }
 
-    public int getOrderId() { return orderId; }
-    public void setOrderId(int orderId) { this.orderId = orderId; }
+    // Getters & Setters
+    public Integer getMenuItemId() {
+        return menuItemId;
+    }
 
-    public int getMenuItemId() { return menuItemId; }
-    public void setMenuItemId(int menuItemId) { this.menuItemId = menuItemId; }
+    public void setMenuItemId(Integer menuItemId) {
+        this.menuItemId = menuItemId;
+    }
 
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public String getMenuItemName() {
+        return menuItemName;
+    }
 
-    public double getUnitPrice() { return unitPrice; }
-    public void setUnitPrice(double unitPrice) { this.unitPrice = unitPrice; }
+    public void setMenuItemName(String menuItemName) {
+        this.menuItemName = menuItemName;
+    }
 
-    public String getMenuItemName() { return menuItemName; }
-    public void setMenuItemName(String menuItemName) { this.menuItemName = menuItemName; }
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 }

@@ -4,27 +4,121 @@ import java.util.List;
 
 public class OrderDto {
     private int id;
-    private int customerId;
-    private int tableId;
+
+    private Integer customerId;
+    private String customerName;
+
+    private Integer tableId;
+    private String tableName;
+
+    private Integer confirmedBy;
+    private String staffName;
+
     private String status;
+    private Double totalAmount;
     private String createdAt;
+    private String paidAt;
+
     private List<OrderItemDto> items;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Constructors
+    public OrderDto() {
+    }
 
-    public int getCustomerId() { return customerId; }
-    public void setCustomerId(int customerId) { this.customerId = customerId; }
+    // Getters & Setters
+    public int getId() {
+        return id;
+    }
 
-    public int getTableId() { return tableId; }
-    public void setTableId(int tableId) { this.tableId = tableId; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public Integer getCustomerId() {
+        return customerId;
+    }
 
-    public String getCreatedAt() { return createdAt; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
 
-    public List<OrderItemDto> getItems() { return items; }
-    public void setItems(List<OrderItemDto> items) { this.items = items; }
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public Integer getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(Integer tableId) {
+        this.tableId = tableId;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public Integer getConfirmedBy() {
+        return confirmedBy;
+    }
+
+    public void setConfirmedBy(Integer confirmedBy) {
+        this.confirmedBy = confirmedBy;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getPaidAt() {
+        return paidAt;
+    }
+
+    public void setPaidAt(String paidAt) {
+        this.paidAt = paidAt;
+    }
+
+    public List<OrderItemDto> getItems() {
+        return items;
+    }
+
+    public void setItems(List<OrderItemDto> items) {
+        this.items = items;
+    }
 }
