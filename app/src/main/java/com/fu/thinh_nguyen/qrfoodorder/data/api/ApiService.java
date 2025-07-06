@@ -18,6 +18,6 @@ public interface ApiService {
     @POST("api/Auth/register")
     Call<UserDto> register(@Body RegisterDto dto);
 
-    @GET("/apiAuth/me")
+    @GET("api/Auth/me")
     Call<CurrentUserDto> getCurrentUser();
 }
