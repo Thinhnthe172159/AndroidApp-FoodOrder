@@ -1,4 +1,6 @@
 package com.fu.thinh_nguyen.qrfoodorder.data.network;
+import static com.fu.thinh_nguyen.qrfoodorder.data.config.Constants.BASE_URL;
+
 import com.fu.thinh_nguyen.qrfoodorder.data.api.AuthInterceptor;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 
@@ -15,7 +17,7 @@ public class RetrofitClient {
                     .build();
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://thinhnguyen5k-001-site1.ltempurl.com/")
+                    .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();

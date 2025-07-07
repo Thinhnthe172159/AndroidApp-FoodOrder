@@ -1,11 +1,13 @@
 package com.fu.thinh_nguyen.qrfoodorder.data.prefs;
 
+import static com.fu.thinh_nguyen.qrfoodorder.data.config.Constants.KEY_TOKEN;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 public class TokenManager {
-    private static final String KEY = "jwt_token";
+
     private SharedPreferences prefs;
+    private static final String KEY = KEY_TOKEN;
 
     public TokenManager(Context context) {
         prefs = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
