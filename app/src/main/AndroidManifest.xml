@@ -14,12 +14,12 @@
         android:theme="@style/Theme.QRFoodOrder"
         tools:targetApi="31">
         <activity android:name=".ui.auth.LoginActivity" />
-        <activity android:name=".ui.customer.CustomerMainActivity" />
+        <activity android:name=".ui.base.MainActivity" />
         <activity android:name=".ui.staff.StaffMainActivity" />
         <activity android:name=".ui.manager.ManagerMainActivity" />
 
         <activity
-            android:name=".ui.base.MainActivity"
+            android:name=".ui.customer.CustomerMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
