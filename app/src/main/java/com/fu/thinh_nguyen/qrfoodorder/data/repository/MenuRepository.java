@@ -1,6 +1,7 @@
 package com.fu.thinh_nguyen.qrfoodorder.data.repository;
 
 import com.fu.thinh_nguyen.qrfoodorder.data.api.ApiService;
+import com.fu.thinh_nguyen.qrfoodorder.data.api.menu.MenuItemService;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.CategoryDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.MenuItemDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.MenuSearchFilter;
@@ -18,30 +19,30 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class MenuRepository {
-    private ApiService apiService;
+    private final MenuItemService menuItemService;
 
     public MenuRepository(TokenManager tokenManager) {
-        this.apiService = RetrofitClient.getInstance(tokenManager).create(ApiService.class);
+        this.menuItemService = RetrofitClient.getInstance(tokenManager).create(MenuItemService.class);
     }
 
     public void getMenuItems(Callback<List<MenuItemDto>> callback) {
-        Call<List<MenuItemDto>> call = apiService.getMenuItems();
+        Call<List<MenuItemDto>> call = menuItemService.getMenuItems();
         call.enqueue(callback);
     }
 
     public void getMenuItemById(int id, Callback<MenuItemDto> callback) {
-        Call<MenuItemDto> call = apiService.getMenuItemById(id);
+        Call<MenuItemDto> call = menuItemService.getMenuItemById(id);
         call.enqueue(callback);
     }
 
     public void searchMenuItems(MenuSearchFilter filter, Callback<List<MenuItemDto>> callback) {
-        Call<List<MenuItemDto>> call = apiService.searchMenuItems(filter);
+        Call<List<MenuItemDto>> call = menuItemService.searchMenuItems(filter);
         call.enqueue(callback);
     }
 
     public void searchMenuItemsByQuery(String keyword, Integer categoryId, Boolean isAvailable,
                                        BigDecimal minPrice, BigDecimal maxPrice, Callback<List<MenuItemDto>> callback) {
-        Call<List<MenuItemDto>> call = apiService.searchMenuItemsByQuery(
+        Call<List<MenuItemDto>> call = menuItemService.searchMenuItemsByQuery(
                 keyword, categoryId, isAvailable,
                 minPrice != null ? minPrice.doubleValue() : null,
                 maxPrice != null ? maxPrice.doubleValue() : null
@@ -66,7 +67,7 @@ public class MenuRepository {
             imagePart = MultipartBody.Part.createFormData("ImageFile", imageFile.getName(), imageBody);
         }
 
-        Call<MenuItemDto> call = apiService.createMenuItem(
+        Call<MenuItemDto> call = menuItemService.createMenuItem(
                 nameBody, descBody, priceBody, categoryBody, availableBody, imagePart
         );
         call.enqueue(callback);
@@ -89,19 +90,19 @@ public class MenuRepository {
             imagePart = MultipartBody.Part.createFormData("ImageFile", imageFile.getName(), imageBody);
         }
 
-        Call<MenuItemDto> call = apiService.updateMenuItem(
+        Call<MenuItemDto> call = menuItemService.updateMenuItem(
                 id, nameBody, descBody, priceBody, categoryBody, availableBody, imagePart
         );
         call.enqueue(callback);
     }
 
     public void deleteMenuItem(int id, Callback<Void> callback) {
-        Call<Void> call = apiService.deleteMenuItem(id);
+        Call<Void> call = menuItemService.deleteMenuItem(id);
         call.enqueue(callback);
     }
 
     public void getCategories(Callback<List<CategoryDto>> callback) {
-        Call<List<CategoryDto>> call = apiService.getCategories();
+        Call<List<CategoryDto>> call = menuItemService.getCategories();
         call.enqueue(callback);
     }
 
