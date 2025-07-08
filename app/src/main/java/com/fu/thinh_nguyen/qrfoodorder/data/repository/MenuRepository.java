@@ -1,7 +1,6 @@
 package com.fu.thinh_nguyen.qrfoodorder.data.repository;
 
-import com.fu.thinh_nguyen.qrfoodorder.data.api.ApiService;
-import com.fu.thinh_nguyen.qrfoodorder.data.api.menu.MenuItemService;
+import com.fu.thinh_nguyen.qrfoodorder.data.api.MenuItemService;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.CategoryDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.MenuItemDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.MenuSearchFilter;

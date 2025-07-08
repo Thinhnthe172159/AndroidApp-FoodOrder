@@ -1,6 +1,9 @@
 package com.fu.thinh_nguyen.qrfoodorder.ui.customer;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -8,11 +11,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fu.thinh_nguyen.qrfoodorder.R;
+import com.fu.thinh_nguyen.qrfoodorder.data.api.OrderService;
 import com.fu.thinh_nguyen.qrfoodorder.data.api.TableService;
+import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderCreateDto;
+import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
+import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderItemCreateDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.TableStatusUpdateDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.network.RetrofitClient;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.base.BaseActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,35 +60,37 @@ public class QrTableStatusActivity extends BaseActivity {
             Toast.makeText(this, "Bàn đang được sử dụng", Toast.LENGTH_SHORT).show();
         }
 
-        //btnReserve.setOnClickListener(v -> reserveTable());
+        btnReserve.setOnClickListener(v -> reserveTable(tableId));
 
         btnCancel.setOnClickListener(v -> finish());
     }
 
-//    private void reserveTable() {
-//        TokenManager tm = new TokenManager(this);
-//        TableService service = RetrofitClient.getInstance(tm).create(TableService.class);
-//
-//        TableStatusUpdateDto dto = new TableStatusUpdateDto("reserved");
-//
-//        service.updateTableStatus(tableId, dto).enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                if (response.isSuccessful()) {
-//                    Toast.makeText(QrTableStatusActivity.this,
-//                            "Đặt bàn thành công!", Toast.LENGTH_SHORT).show();
-//                    finish(); // hoặc chuyển màn hình khác nếu muốn
-//                } else {
-//                    Toast.makeText(QrTableStatusActivity.this,
-//                            "Không thể đặt bàn!", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {
-//                Toast.makeText(QrTableStatusActivity.this,
-//                        "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void reserveTable(int tableId) {
+        TokenManager tm = new TokenManager(this);
+        OrderService orderService = RetrofitClient.getInstance(tm).create(OrderService.class);
+        OrderCreateDto createDto = new OrderCreateDto();
+        createDto.setTableId(tableId);
+        createDto.setCustomerId(0);
+        createDto.setItems(new ArrayList<>());
+
+        orderService.createOrder(createDto).enqueue(new Callback<OrderDto>() {
+            @Override
+            public void onResponse(Call<OrderDto> call, Response<OrderDto> response) {
+                Log.d(TAG, "onResponse: " + response.code() + " " + response.message());
+                Log.d("TOKEN", "Bearer " + tm.get());
+                if (response.isSuccessful()) {
+                    Toast.makeText(QrTableStatusActivity.this, "Đặt bàn thành công", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(QrTableStatusActivity.this, "Đặt bàn thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderDto> call, Throwable throwable) {
+
+            }
+        });
+
+    }
 }
