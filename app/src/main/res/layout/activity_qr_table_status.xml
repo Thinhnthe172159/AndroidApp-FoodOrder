@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Hình ảnh bàn demo -->
+
+    <!-- Tên bàn -->
+
+    <ImageView
+        android:id="@+id/img_table"
+        android:layout_width="431dp"
+        android:layout_height="256dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="24dp"
+        android:contentDescription="Ảnh bàn ăn"
+        android:src="@drawable/ic_table_demo" />
+
+    <TextView
+        android:id="@+id/tv_table_name"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Bàn số: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Trạng thái bàn -->
+    <TextView
+        android:id="@+id/tv_table_status"
+        android:textSize="18sp"
+        android:text="Trạng thái: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Nút đặt bàn -->
+    <Button
+        android:id="@+id/btn_reserve"
+        android:text="Xác nhận đặt bàn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Nút hủy -->
+    <Button
+        android:id="@+id/btn_cancel"
+        android:text="Hủy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" />
+
+</LinearLayout>

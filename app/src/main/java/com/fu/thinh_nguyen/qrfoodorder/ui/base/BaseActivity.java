@@ -46,14 +46,14 @@ public class BaseActivity extends AppCompatActivity {
             // điền các hành động cho các button ở đây
             if (item.getItemId() == R.id.nav_logout) {
                 new TokenManager(this).clear();
-                Intent intent = new Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 return true;
             }
 
-            if (itemId == R.id.nav_scan_qr) {
+            if (item.getItemId() == R.id.nav_scan_qr) {
                 // Gọi activity quét mã QR
                 startActivity(new Intent(this, ScanQRActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
