@@ -7,6 +7,12 @@
         android:id="@+id/nav_profile"
         android:title="Profile"
         android:icon="@drawable/ic_user" />
+
+    <item
+        android:id="@+id/nav_scan_qr"
+        android:title="Scan QR Code"
+        android:icon="@drawable/ic_qr_code"
+        android:visible="false" />
     <item
         android:id="@+id/nav_logout"
         android:title="Logout"
