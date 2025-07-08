@@ -1,0 +1,68 @@
+package com.fu.thinh_nguyen.qrfoodorder.data.api;
+
+import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderCreateDto;
+import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
+import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderItemCreateDto;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.http.*;
+
+public interface OrderService {
+
+    /* ------------------------------------------------------------------
+     * 1.   (ORDER)
+     * ---------------------------------------------------------------- */
+
+    @GET("api/order")
+    Call<List<OrderDto>> getOrders(
+            @Query("customerId") Integer customerId,
+            @Query("status") String status
+    );
+
+    @GET("api/order/{id}")
+    Call<OrderDto> getOrderById(@Path("id") int id);
+
+    @POST("api/order")
+    Call<OrderDto> createOrder(@Body OrderCreateDto dto);
+
+    @PUT("api/order/{id}/status")
+    Call<Void> updateOrderStatus(@Path("id") int id, @Body String status);
+
+    @POST("api/order/Cancel/{id}")
+    Call<Void> cancelOrder(@Path("id") int id);
+
+    @POST("api/order/SearchOrder")
+    Call<List<OrderDto>> searchOrder(@Body OrderDto dto);
+
+    @POST("api/order/getMyCurrentOrder")
+    Call<List<OrderDto>> getMyCurrentOrder(@Header("Authorization") String token);
+
+
+    /* ------------------------------------------------------------------
+     * 2.  (ORDER ITEM)
+     * ---------------------------------------------------------------- */
+
+    @GET("api/order/{orderId}/items")
+    Call<List<OrderItemCreateDto>> getItemsByOrderId(@Path("orderId") int orderId);
+
+    @POST("api/order/{orderId}/items")
+    Call<OrderItemCreateDto> addItem(
+            @Path("orderId") int orderId,
+            @Body OrderItemCreateDto dto
+    );
+
+    @PUT("api/order/{orderId}/items/{itemId}/quantity")
+    Call<Void> updateItemQuantity(
+            @Path("orderId") int orderId,
+            @Path("itemId") int itemId,
+            @Body int quantity
+    );
+
+    @DELETE("api/order/{orderId}/items/{itemId}")
+    Call<Void> removeItem(
+            @Path("orderId") int orderId,
+            @Path("itemId") int itemId
+    );
+}
