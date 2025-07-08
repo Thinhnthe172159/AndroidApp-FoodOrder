@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.auth.LoginActivity;
+import com.fu.thinh_nguyen.qrfoodorder.ui.customer.ScanQRActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class BaseActivity extends AppCompatActivity {
@@ -29,31 +30,54 @@ public class BaseActivity extends AppCompatActivity {
         FrameLayout container = fullView.findViewById(R.id.container);
         LayoutInflater.from(this).inflate(layoutResID, container, true);
         super.setContentView(fullView);
-
         drawerLayout = fullView.findViewById(R.id.drawer_layout);
         btnMenu       = fullView.findViewById(R.id.btn_menu);
-        NavigationView navigationView = fullView.findViewById(R.id.navigation_view);
 
-        // Mở drawer khi nhấn nút menu
         btnMenu.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
-        // Xử lý click menu
-        navigationView.setNavigationItemSelectedListener(item -> {
-            drawerLayout.closeDrawer(GravityCompat.START);   // đóng ngăn kéo
+        NavigationView navigationView = fullView.findViewById(R.id.navigation_view);
+        SetButtonByRole(navigationView);
+        SetButtonAction(navigationView);
+    }
 
+    private void SetButtonAction(NavigationView navView){
+        navView.setNavigationItemSelectedListener(item -> {
+            drawerLayout.closeDrawer(GravityCompat.START);
+            // điền các hành động cho các button ở đây
             if (item.getItemId() == R.id.nav_logout) {
-                // 1) Xoá token
                 new TokenManager(this).clear();
-                // 2) Quay về LoginActivity
-                Intent intent = new Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 return true;
             }
 
+            if (item.getItemId() == R.id.nav_scan_qr) {
+                // Gọi activity quét mã QR
+                startActivity(new Intent(this, ScanQRActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                return true;
+            }
 
             return true;
         });
+
+    }
+
+    private void SetButtonByRole(NavigationView navView){
+        TokenManager tokenManager = new TokenManager(this);
+        String role = tokenManager.getRole();
+        if("customer".equalsIgnoreCase(role)){
+            navView.getMenu().findItem(R.id.nav_scan_qr).setVisible(true);
+
+        }
+        // them button staff
+        if("staff".equalsIgnoreCase(role)){
+            // them các button thuộc role nào ở đây
+        }
+        if("manager".equalsIgnoreCase(role)){
+
+        }
     }
 }
