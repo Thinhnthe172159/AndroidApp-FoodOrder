@@ -1,4 +1,4 @@
-package com.fu.thinh_nguyen.qrfoodorder.data.api.menu;
+package com.fu.thinh_nguyen.qrfoodorder.data.api;
 
 import com.fu.thinh_nguyen.qrfoodorder.data.model.CategoryDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.MenuItemDto;

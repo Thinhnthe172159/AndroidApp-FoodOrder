@@ -1,9 +1,10 @@
 package com.fu.thinh_nguyen.qrfoodorder.ui.auth;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +47,13 @@ public class LoginActivity extends AppCompatActivity{
             String p = edtPass.getText().toString().trim();
             doLogin(u, p);
         });
+        ViewPassword();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     private void doLogin(String u, String p) {
@@ -64,9 +72,10 @@ public class LoginActivity extends AppCompatActivity{
                     if (response.isSuccessful() && response.body() != null) {
                         tokenManager.save(response.body().getToken());
                         String role = response.body().getUser().getRoleName();
+                        tokenManager.saveRole(role);
                         goToRole(role);
                     } else {
-                        Toast.makeText(LoginActivity.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Sai user hoặc mật khẩu, Vui lòng kiểm tra lại", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -108,6 +117,29 @@ public class LoginActivity extends AppCompatActivity{
         } catch (Exception e) {
             Toast.makeText(this, "Error when routing: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void ViewPassword(){
+        ImageView imgTogglePassword = findViewById(R.id.imgTogglePassword);
+
+        final boolean[] isPasswordVisible = {false};
+
+        imgTogglePassword.setOnClickListener(v -> {
+            if (isPasswordVisible[0]) {
+
+                edtPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                imgTogglePassword.setImageResource(R.drawable.ic_eye_open);
+            } else {
+
+                edtPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                imgTogglePassword.setImageResource(R.drawable.ic_eye_open);
+            }
+
+
+            edtPass.setSelection(edtPass.getText().length());
+
+            isPasswordVisible[0] = !isPasswordVisible[0];
+        });
     }
 
 }

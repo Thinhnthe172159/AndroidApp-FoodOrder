@@ -1,32 +1,27 @@
 package com.fu.thinh_nguyen.qrfoodorder.data.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class TableDto {
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("tableNumber")
     private String tableNumber;
+
+    @SerializedName("qrCode")
     private String qrCode;
+
+    @SerializedName("status")
     private String status;
 
-    // Constructors
-    public TableDto() {}
-
-    public TableDto(int id, String tableNumber, String qrCode, String status) {
-        this.id = id;
-        this.tableNumber = tableNumber;
-        this.qrCode = qrCode;
-        this.status = status;
-    }
-
-    // Getters and Setters
     public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
     public String getTableNumber() { return tableNumber; }
-    public void setTableNumber(String tableNumber) { this.tableNumber = tableNumber; }
-
     public String getQrCode() { return qrCode; }
-    public void setQrCode(String qrCode) { this.qrCode = qrCode; }
-
     public String getStatus() { return status; }
+
+    public void setId(int id) { this.id = id; }
+    public void setTableNumber(String tableNumber) { this.tableNumber = tableNumber; }
+    public void setQrCode(String qrCode) { this.qrCode = qrCode; }
     public void setStatus(String status) { this.status = status; }
 }
-

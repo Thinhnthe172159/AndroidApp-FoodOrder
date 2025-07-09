@@ -12,16 +12,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Username"
+        android:maxLength="30"
         android:minHeight="48dp" />
 
-    <EditText
-        android:id="@+id/edtPassword"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:minHeight="48dp" />
+        android:layout_marginTop="16dp">
+
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:maxLength="30"
+            android:minHeight="48dp"
+            android:paddingEnd="48dp" />
+
+        <ImageView
+            android:id="@+id/imgTogglePassword"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_eye_open" />
+    </RelativeLayout>
+
 
     <Button
         android:id="@+id/btnLogin"

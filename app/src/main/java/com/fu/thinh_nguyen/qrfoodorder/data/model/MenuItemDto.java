@@ -39,4 +39,6 @@ public class MenuItemDto {
 
     public Integer getCategoryId() { return categoryId; }
     public void setCategoryId(Integer categoryId) { this.categoryId = categoryId; }
+
+
 }

@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.data.repository.MenuRepository;
 import com.fu.thinh_nguyen.qrfoodorder.ui.adapter.CategoryAdapter;
 import com.fu.thinh_nguyen.qrfoodorder.ui.adapter.MenuItemAdapter;
+import com.fu.thinh_nguyen.qrfoodorder.ui.base.BaseActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.math.BigDecimal;
@@ -30,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CustomerMainActivity extends AppCompatActivity {
+public class CustomerMainActivity extends BaseActivity {
     private MenuRepository menuRepository;
     private TokenManager tokenManager;
 
@@ -44,6 +46,7 @@ public class CustomerMainActivity extends AppCompatActivity {
     // Adapters
     private MenuItemAdapter menuItemAdapter;
     private CategoryAdapter categoryAdapter;
+    private ImageButton btnSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,9 @@ public class CustomerMainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         emptyStateLayout = findViewById(R.id.emptyStateLayout);
         searchEditText = findViewById(R.id.searchEditText);
+        btnSearch = findViewById(R.id.btnSearch);
     }
+
 
     private void setupRecyclerViews() {
         // Setup menu items RecyclerView
@@ -86,19 +91,12 @@ public class CustomerMainActivity extends AppCompatActivity {
     }
 
     private void setupSearchListener() {
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                searchMenuItems(s.toString());
-            }
+        btnSearch.setOnClickListener(v -> {
+            String keyword = searchEditText.getText() != null ? searchEditText.getText().toString() : "";
+            searchMenuItems(keyword);
         });
     }
+
 
     private void showLoading(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -177,7 +175,7 @@ public class CustomerMainActivity extends AppCompatActivity {
         showLoading(true);
         MenuSearchFilter filter = new MenuSearchFilter();
         filter.setKeyword(keyword);
-        filter.setIsAvailable(true);
+        //filter.setIsAvailable(true);
 
         menuRepository.searchMenuItems(filter, new Callback<List<MenuItemDto>>() {
             @Override
