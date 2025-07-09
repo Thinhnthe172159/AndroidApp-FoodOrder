@@ -3,7 +3,6 @@ package com.fu.thinh_nguyen.qrfoodorder.ui.base;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
@@ -15,7 +14,6 @@ import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.auth.LoginActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.customer.ScanQRActivity;
-import com.fu.thinh_nguyen.qrfoodorder.ui.customer.ViewOrderActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class BaseActivity extends AppCompatActivity {
@@ -35,25 +33,12 @@ public class BaseActivity extends AppCompatActivity {
         drawerLayout = fullView.findViewById(R.id.drawer_layout);
         btnMenu       = fullView.findViewById(R.id.btn_menu);
 
-        btnMenu.setOnClickListener(v ->{
-            hideKeyboard();
-            drawerLayout.openDrawer(GravityCompat.START);});
+        btnMenu.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
         NavigationView navigationView = fullView.findViewById(R.id.navigation_view);
         SetButtonByRole(navigationView);
         SetButtonAction(navigationView);
     }
-
-    private void hideKeyboard() {
-        View view = getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
-        }
-    }
-
 
     private void SetButtonAction(NavigationView navView){
         navView.setNavigationItemSelectedListener(item -> {
@@ -68,26 +53,18 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             }
 
-
             if(item.getItemId() == R.id.nav_profile) {
                 startActivity(new Intent(this, ProfileActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
+            }
 
             if (item.getItemId() == R.id.nav_scan_qr) {
+                // Gọi activity quét mã QR
                 startActivity(new Intent(this, ScanQRActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
             }
-
-            // xem đơn hàng
-            if (item.getItemId() == R.id.view_my_order) {
-                startActivity(new Intent(this, ViewOrderActivity.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                return true;
-            }
-
-
 
             return true;
         });
@@ -99,7 +76,7 @@ public class BaseActivity extends AppCompatActivity {
         String role = tokenManager.getRole();
         if("customer".equalsIgnoreCase(role)){
             navView.getMenu().findItem(R.id.nav_scan_qr).setVisible(true);
-            navView.getMenu().findItem(R.id.view_my_order).setVisible(true);
+
         }
         // them button staff
         if("staff".equalsIgnoreCase(role)){
