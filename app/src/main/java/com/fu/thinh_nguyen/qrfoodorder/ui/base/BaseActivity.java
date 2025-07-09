@@ -14,6 +14,7 @@ import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.auth.LoginActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.customer.ScanQRActivity;
+import com.fu.thinh_nguyen.qrfoodorder.ui.customer.ViewOrderActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class BaseActivity extends AppCompatActivity {
@@ -65,6 +66,11 @@ public class BaseActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
             }
+            if(item.getItemId() == R.id.view_my_order){
+                startActivity(new Intent(this, ViewOrderActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                return true;
+            }
 
             return true;
         });
@@ -76,7 +82,7 @@ public class BaseActivity extends AppCompatActivity {
         String role = tokenManager.getRole();
         if("customer".equalsIgnoreCase(role)){
             navView.getMenu().findItem(R.id.nav_scan_qr).setVisible(true);
-
+            navView.getMenu().findItem(R.id.view_my_order).setVisible(true);
         }
         // them button staff
         if("staff".equalsIgnoreCase(role)){
