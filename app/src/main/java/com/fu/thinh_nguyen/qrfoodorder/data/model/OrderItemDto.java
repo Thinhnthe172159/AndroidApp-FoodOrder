@@ -1,8 +1,6 @@
 package com.fu.thinh_nguyen.qrfoodorder.data.model;
 
-import java.io.Serializable;
-
-public class OrderItemDto  {
+public class OrderItemDto {
     private Integer menuItemId;
     private String menuItemName;
     private int quantity;

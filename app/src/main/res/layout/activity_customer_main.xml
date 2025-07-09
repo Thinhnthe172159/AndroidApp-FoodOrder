@@ -27,12 +27,9 @@
                 android:id="@+id/searchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:hint="Search menu items..."
-                android:paddingEnd="48dp"
-                android:maxLength="30"
-                android:imeOptions="actionSearch"
-                android:inputType="text" />
-
+                android:paddingEnd="48dp" />
 
             <ImageButton
                 android:id="@+id/btnSearch"
