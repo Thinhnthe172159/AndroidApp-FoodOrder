@@ -14,7 +14,7 @@ import com.fu.thinh_nguyen.qrfoodorder.data.model.StatusOrder;
 
 import java.util.List;
 
-public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
+public class CustomerOrderAdapter extends RecyclerView.Adapter<CustomerOrderAdapter.OrderViewHolder> {
 
     private List<OrderDto> orderList;
     private final OnOrderClickListener listener;
@@ -23,7 +23,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         void onOrderClick(OrderDto order);
     }
 
-    public OrderAdapter(List<OrderDto> orderList, OnOrderClickListener listener) {
+    public CustomerOrderAdapter(List<OrderDto> orderList, OnOrderClickListener listener) {
         this.orderList = orderList;
         this.listener = listener;
     }

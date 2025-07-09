@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -13,7 +13,7 @@ import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.data.repository.TableRepository;
-import com.fu.thinh_nguyen.qrfoodorder.ui.adapter.OrderAdapter;
+import com.fu.thinh_nguyen.qrfoodorder.ui.adapter.CustomerOrderAdapter;
 import com.fu.thinh_nguyen.qrfoodorder.ui.base.BaseActivity;
 
 import java.util.ArrayList;
@@ -23,9 +23,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OrderListActivity extends BaseActivity implements OrderAdapter.OnOrderClickListener {
+public class OrderListActivity extends BaseActivity implements CustomerOrderAdapter.OnOrderClickListener {
     private RecyclerView recyclerView;
-    private OrderAdapter orderAdapter;
+    private CustomerOrderAdapter orderAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView tvTableTitle;
     private List<OrderDto> orderList;
@@ -67,7 +67,7 @@ public class OrderListActivity extends BaseActivity implements OrderAdapter.OnOr
 
     private void setupRecyclerView() {
         orderList = new ArrayList<>();
-        orderAdapter = new OrderAdapter(this, orderList);
+        orderAdapter = new CustomerOrderAdapter(this, orderList);
         orderAdapter.setOnOrderClickListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -15,7 +15,7 @@ import com.fu.thinh_nguyen.qrfoodorder.data.api.OrderService;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.network.RetrofitClient;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
-import com.fu.thinh_nguyen.qrfoodorder.ui.adapter.OrderAdapter;
+import com.fu.thinh_nguyen.qrfoodorder.ui.adapter.CustomerOrderAdapter;
 import com.fu.thinh_nguyen.qrfoodorder.ui.base.BaseActivity;
 
 import java.util.List;
@@ -27,7 +27,7 @@ import retrofit2.Response;
 public class ViewOrderActivity extends BaseActivity {
 
     private RecyclerView recyclerView;
-    private OrderAdapter adapter;
+    private CustomerOrderAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class ViewOrderActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Chỉ khởi tạo adapter 1 lần duy nhất
-        adapter = new OrderAdapter(null, order -> {
+        adapter = new CustomerOrderAdapter(null, order -> {
             Intent intent = new Intent(ViewOrderActivity.this, OrderDetailActivity.class);
             intent.putExtra("ORDER_ID", order.getId());
             startActivity(intent);
