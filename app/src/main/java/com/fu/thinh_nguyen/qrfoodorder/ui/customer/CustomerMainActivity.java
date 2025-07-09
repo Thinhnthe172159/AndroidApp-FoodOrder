@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -95,7 +97,20 @@ public class CustomerMainActivity extends BaseActivity {
             String keyword = searchEditText.getText() != null ? searchEditText.getText().toString() : "";
             searchMenuItems(keyword);
         });
+
+        searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                    actionId == EditorInfo.IME_ACTION_DONE ||
+                    (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
+                            event.getAction() == KeyEvent.ACTION_DOWN)) {
+                String keyword = searchEditText.getText() != null ? searchEditText.getText().toString() : "";
+                searchMenuItems(keyword);
+                return true;
+            }
+            return false;
+        });
     }
+
 
 
     private void showLoading(boolean show) {
@@ -220,4 +235,6 @@ public class CustomerMainActivity extends BaseActivity {
             }
         });
     }
+
+
 }

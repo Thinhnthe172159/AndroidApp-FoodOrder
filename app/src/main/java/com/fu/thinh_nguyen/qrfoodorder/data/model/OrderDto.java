@@ -1,5 +1,6 @@
 package com.fu.thinh_nguyen.qrfoodorder.data.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class OrderDto {

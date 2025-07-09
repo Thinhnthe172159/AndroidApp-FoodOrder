@@ -32,6 +32,9 @@
             android:exported="false" />
         <activity android:name=".ui.staff.StaffMainActivity" />
         <activity android:name=".ui.manager.ManagerMainActivity" />
+        <activity android:name=".ui.customer.ViewOrderActivity" />
+        <activity android:name=".ui.customer.OrderDetailActivity" />
+
         <activity
             android:name=".ui.customer.QrTableStatusActivity"
             android:exported="false" />
