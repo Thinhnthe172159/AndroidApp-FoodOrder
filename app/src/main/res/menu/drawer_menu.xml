@@ -5,16 +5,21 @@
         android:icon="@drawable/ic_home" />
     <item
         android:id="@+id/nav_profile"
-        android:title="Profile"
+        android:title="Tài khoản"
         android:icon="@drawable/ic_user" />
 
     <item
         android:id="@+id/nav_scan_qr"
-        android:title="Scan QR Code"
+        android:title="Chọn bàn"
         android:icon="@drawable/ic_qr_code"
         android:visible="false" />
     <item
+        android:id="@+id/view_my_order"
+        android:title="Order của bạn"
+        android:icon="@drawable/ic_order"
+        android:visible="false" />
+    <item
         android:id="@+id/nav_logout"
-        android:title="Logout"
+        android:title="Đăng xuất"
         android:icon="@drawable/ic_logout" />
 </menu>
