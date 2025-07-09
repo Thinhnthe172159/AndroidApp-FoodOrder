@@ -1,91 +1,77 @@
 package com.fu.thinh_nguyen.qrfoodorder.ui.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderItemDto;
-import java.text.NumberFormat;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.OrderItemViewHolder> {
-    private List<OrderItemDto> itemList;
-    private Context context;
+public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.ItemViewHolder> {
 
-    public OrderItemAdapter(Context context) {
-        this.context = context;
-        this.itemList = new ArrayList<>();
+    private final List<OrderItemDto> itemList;
+
+    public OrderItemAdapter(List<OrderItemDto> itemList) {
+        this.itemList = itemList != null ? itemList : new ArrayList<>();
     }
 
     @NonNull
     @Override
-    public OrderItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_order_item, parent, false);
-        return new OrderItemViewHolder(view);
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order_detail, parent, false);
+        return new ItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         OrderItemDto item = itemList.get(position);
-        holder.bind(item);
+
+        holder.txtName.setText(item.getMenuItemName());
+        holder.txtPrice.setText(item.getPrice() + "đ");
+        holder.txtQuantity.setText(item.getQuantity() + " món");
+
+
+        // Nếu có ảnh, load ảnh vào imgFood, nếu không thì giữ placeholder
+        // Glide.with(holder.imgFood.getContext()).load(item.getImageUrl()).into(holder.imgFood);
+
+        // Nếu có ghi chú thì xử lý nếu muốn hiển thị thêm
+
+//        holder.btnCancel.setOnClickListener(v -> {
+//            // TODO: xử lý huỷ món
+//        });
+//
+//        holder.btnTrack.setOnClickListener(v -> {
+//            // TODO: cập nhật trạng thái món hoặc mở chi tiết
+//        });
     }
 
     @Override
     public int getItemCount() {
-        return itemList != null ? itemList.size() : 0;
+        return itemList.size();
     }
 
-    public void updateItems(List<OrderItemDto> newItems) {
-        this.itemList = newItems != null ? newItems : new ArrayList<>();
-        notifyDataSetChanged();
-    }
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
+        TextView txtName, txtPrice, txtQuantity, txtTime;
 
-    class OrderItemViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvProductName;
-        private TextView tvQuantity;
-        private TextView tvUnitPrice;
-        private TextView tvTotalPrice;
-        private TextView tvNotes;
+        //Button btnCancel, btnTrack;
 
-        public OrderItemViewHolder(@NonNull View itemView) {
+        public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvProductName = itemView.findViewById(R.id.tv_product_name);
-            tvQuantity = itemView.findViewById(R.id.tv_quantity);
-            tvUnitPrice = itemView.findViewById(R.id.tv_unit_price);
-            tvTotalPrice = itemView.findViewById(R.id.tv_total_price);
-            tvNotes = itemView.findViewById(R.id.tv_notes);
+
+            txtName = itemView.findViewById(R.id.txtItemName);
+            txtPrice = itemView.findViewById(R.id.txtItemPrice);
+            txtQuantity = itemView.findViewById(R.id.txtItemQuantity);
+            txtTime = itemView.findViewById(R.id.txtItemTime);
+//            btnCancel = itemView.findViewById(R.id.btnCancel);
+//            btnTrack = itemView.findViewById(R.id.btnTrack);
         }
-
-        public void bind(OrderItemDto item) {
-            // Null check cho product name - sử dụng getMenuItemName()
-            tvProductName.setText(item.getMenuItemName() != null ? item.getMenuItemName() : "Món ăn");
-            tvQuantity.setText("x" + item.getQuantity());
-
-            // Format currency
-            NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
-
-            // Price - chỉ có một giá (price), không có unitPrice và totalPrice riêng
-            double price = item.getPrice() != null ? item.getPrice() : 0;
-            tvUnitPrice.setText(formatter.format(price) + "đ");
-
-            // Total price = price * quantity
-            double totalPrice = price * item.getQuantity();
-            tvTotalPrice.setText(formatter.format(totalPrice) + "đ");
-
-            // Notes - sử dụng getNote() thay vì getNotes()
-            if (item.getNote() != null && !item.getNote().trim().isEmpty()) {
-                tvNotes.setText("Ghi chú: " + item.getNote());
-                tvNotes.setVisibility(View.VISIBLE);
-            } else {
-                tvNotes.setVisibility(View.GONE);
-            }
-        }
-
     }
 }
+
