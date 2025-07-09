@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Back & Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_circle"
+                android:src="@drawable/baseline_arrow_back_24"
+                android:contentDescription="Back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Profile"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <!-- Header Background with Avatar -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="16dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="#D50000"
+                android:rotation="-5"
+                android:layout_alignParentTop="true" />
+
+            <ImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="40dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_user"
+                android:background="@drawable/bg_circle_white"
+                android:elevation="4dp" />
+        </RelativeLayout>
+
+        <!-- User Info -->
+        <TextView
+            android:id="@+id/tvFullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Julia Edwards"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="juliaedwards@gmail.com"
+            android:textAlignment="center"
+            android:textColor="#888888"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="+1234567890"
+            android:textAlignment="center"
+            android:textColor="#888888"
+            android:layout_marginTop="2dp" />
+
+        <!-- Edit Profile Button -->
+        <Button
+            android:id="@+id/btnEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Profile"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#D50000"
+            android:layout_marginTop="12dp"
+            android:layout_gravity="center_horizontal"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp" />
+
+        <!-- Form Fields (hidden by default) -->
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:visibility="gone"
+            android:background="@drawable/edittext_background"
+            android:padding="12dp"
+            android:layout_marginTop="12dp" />
+
+        <EditText
+            android:id="@+id/etConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Confirm Password"
+            android:inputType="textPassword"
+            android:visibility="gone"
+            android:background="@drawable/edittext_background"
+            android:padding="12dp"
+            android:layout_marginTop="12dp" />
+
+        <EditText
+            android:id="@+id/etFullName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Full Name"
+            android:visibility="gone"
+            android:background="@drawable/edittext_background"
+            android:padding="12dp"
+            android:layout_marginTop="12dp" />
+
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Phone"
+            android:visibility="gone"
+            android:background="@drawable/edittext_background"
+            android:padding="12dp"
+            android:layout_marginTop="12dp" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Email"
+            android:visibility="gone"
+            android:background="@drawable/edittext_background"
+            android:padding="12dp"
+            android:layout_marginTop="12dp" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Save"
+            android:visibility="gone"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#D50000"
+            android:layout_marginTop="16dp" />
+
+        <!-- Section Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="24dp">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My Orders"
+                android:background="@drawable/bg_card_button"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="12dp" />
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Change Password"
+                android:background="@drawable/bg_card_button"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="12dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

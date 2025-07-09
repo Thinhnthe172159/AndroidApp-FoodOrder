@@ -13,6 +13,7 @@ import com.fu.thinh_nguyen.qrfoodorder.data.model.UserDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.network.RetrofitClient;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.auth.LoginActivity;
+import com.fu.thinh_nguyen.qrfoodorder.ui.auth.RegisterActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.customer.CustomerMainActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.staff.StaffMainActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.manager.ManagerMainActivity;
@@ -45,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> goToLogin());
 
         btnSignup.setOnClickListener(v -> {
-            Toast.makeText(this, "Sign up clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
     }
 
