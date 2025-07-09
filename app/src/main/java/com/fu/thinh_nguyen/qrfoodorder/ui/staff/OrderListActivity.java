@@ -14,6 +14,7 @@ import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.data.repository.TableRepository;
 import com.fu.thinh_nguyen.qrfoodorder.ui.adapter.OrderAdapter;
+import com.fu.thinh_nguyen.qrfoodorder.ui.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OrderListActivity extends AppCompatActivity implements OrderAdapter.OnOrderClickListener {
+public class OrderListActivity extends BaseActivity implements OrderAdapter.OnOrderClickListener {
     private RecyclerView recyclerView;
     private OrderAdapter orderAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
