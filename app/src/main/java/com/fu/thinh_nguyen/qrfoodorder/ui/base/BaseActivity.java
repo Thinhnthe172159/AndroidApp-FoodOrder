@@ -68,7 +68,12 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             }
 
-            // quét qr
+
+            if(item.getItemId() == R.id.nav_profile) {
+                startActivity(new Intent(this, ProfileActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                return true;
+
             if (item.getItemId() == R.id.nav_scan_qr) {
                 startActivity(new Intent(this, ScanQRActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
