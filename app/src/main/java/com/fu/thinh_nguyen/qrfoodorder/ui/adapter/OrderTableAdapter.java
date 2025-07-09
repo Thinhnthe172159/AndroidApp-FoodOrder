@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
+public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.OrderViewHolder> {
     private List<OrderDto> orderList;
     private Context context;
     private OnOrderClickListener onOrderClickListener;
@@ -25,7 +25,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         void onOrderClick(OrderDto order);
     }
 
-    public OrderAdapter(Context context, List<OrderDto> orderList) {
+    public OrderTableAdapter(Context context, List<OrderDto> orderList) {
         this.context = context;
         this.orderList = orderList;
     }
