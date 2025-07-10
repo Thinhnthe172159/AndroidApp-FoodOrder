@@ -19,6 +19,7 @@ import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.adapter.OrderItemAdapter2;
 import com.fu.thinh_nguyen.qrfoodorder.ui.base.BaseActivity;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import retrofit2.Call;
@@ -30,7 +31,7 @@ public class OrderDetailActivity extends BaseActivity {
     private RecyclerView recyclerOrderItems;
     private ProgressBar progressBar;
 
-    private TextView txtOrderTitle, txtOrderType, txtOrderPhone, txtOrderAddress, txtOrderTime;
+    private TextView txtOrderTitle, txtOrderType, txtOrderPhone, txtOrderAddress, txtOrderTime, totalPrice;
 
     private OrderService orderService;
 
@@ -42,10 +43,9 @@ public class OrderDetailActivity extends BaseActivity {
         // Ánh xạ view
         recyclerOrderItems = findViewById(R.id.recyclerOrderItems);
         txtOrderTitle   = findViewById(R.id.txtOrderTitle);
-        txtOrderType    = findViewById(R.id.txtOrderType);
-        txtOrderPhone   = findViewById(R.id.txtOrderPhone);
         txtOrderAddress = findViewById(R.id.txtOrderAddress);
         txtOrderTime    = findViewById(R.id.txtOrderTime);
+        totalPrice      = findViewById(R.id.txtTotalPrice);
 
         recyclerOrderItems.setLayoutManager(new LinearLayoutManager(this));
 
@@ -73,14 +73,20 @@ public class OrderDetailActivity extends BaseActivity {
                     OrderDto order = response.body();
 
                     // Cập nhật giao diện
-                    txtOrderTitle.setText("Order #" + order.getId());
+                    txtOrderTitle.setText("Đơn số:" + order.getId());
                     txtOrderAddress.setText(order.getTableName());
-                    txtOrderTime.setText(order.getCreatedAt()); // cần format thời gian
+                    txtOrderTime.setText(order.getCreatedAt());
+                    totalPrice.setText(formatVND(order.getTotalAmount()));
 
                     displayOrderItems(order.getItems());
                 } else {
                     Toast.makeText(OrderDetailActivity.this, "Không thể tải chi tiết đơn hàng", Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            public String formatVND(Double amount) {
+                DecimalFormat formatter = new DecimalFormat("#,###");
+                return formatter.format(amount) + " đ";
             }
 
             @Override

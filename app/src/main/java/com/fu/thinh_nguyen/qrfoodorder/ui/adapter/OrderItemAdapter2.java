@@ -3,11 +3,15 @@ package com.fu.thinh_nguyen.qrfoodorder.ui.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderItemDto;
 
@@ -31,21 +35,26 @@ public class OrderItemAdapter2 extends RecyclerView.Adapter<OrderItemAdapter2.It
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
+
         OrderItemDto item = itemList.get(position);
 
         holder.txtName.setText(item.getMenuItemName());
         holder.txtPrice.setText(item.getPrice() + "đ");
         holder.txtQuantity.setText(item.getQuantity() + " món");
+        Glide.with(holder.imgFood.getContext())
+                .load(item.getImage()) // URL ảnh từ API
+                .placeholder(R.drawable.ic_food_placeholder)
+                .error(R.drawable.ic_food_placeholder)
+                .into(holder.imgFood);
 
+        if(!item.getStatus().equals("Pending")){
+            holder.btnCancel.setVisibility(View.GONE);
+            holder.btnTrack.setVisibility(View.GONE);
+        }
 
-        // Nếu có ảnh, load ảnh vào imgFood, nếu không thì giữ placeholder
-        // Glide.with(holder.imgFood.getContext()).load(item.getImageUrl()).into(holder.imgFood);
-
-        // Nếu có ghi chú thì xử lý nếu muốn hiển thị thêm
-
-//        holder.btnCancel.setOnClickListener(v -> {
-//            // TODO: xử lý huỷ món
-//        });
+        holder.btnCancel.setOnClickListener(v -> {
+            Toast.makeText(holder.btnCancel.getContext(), "clicked: "+item.getMenuItemName(), Toast.LENGTH_SHORT).show();
+        });
 //
 //        holder.btnTrack.setOnClickListener(v -> {
 //            // TODO: cập nhật trạng thái món hoặc mở chi tiết
@@ -59,8 +68,9 @@ public class OrderItemAdapter2 extends RecyclerView.Adapter<OrderItemAdapter2.It
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView txtName, txtPrice, txtQuantity, txtTime;
+        ImageView imgFood;
 
-        //Button btnCancel, btnTrack;
+        Button btnCancel, btnTrack;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,8 +79,10 @@ public class OrderItemAdapter2 extends RecyclerView.Adapter<OrderItemAdapter2.It
             txtPrice = itemView.findViewById(R.id.txtItemPrice);
             txtQuantity = itemView.findViewById(R.id.txtItemQuantity);
             txtTime = itemView.findViewById(R.id.txtItemTime);
-//            btnCancel = itemView.findViewById(R.id.btnCancel);
-//            btnTrack = itemView.findViewById(R.id.btnTrack);
+            imgFood = itemView.findViewById(R.id.imgFood);
+
+            btnCancel = itemView.findViewById(R.id.btnCancel);
+            btnTrack = itemView.findViewById(R.id.btnTrack);
         }
     }
 }

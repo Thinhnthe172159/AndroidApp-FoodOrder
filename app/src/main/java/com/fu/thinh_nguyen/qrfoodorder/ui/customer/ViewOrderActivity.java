@@ -42,6 +42,7 @@ public class ViewOrderActivity extends BaseActivity {
             Intent intent = new Intent(ViewOrderActivity.this, OrderDetailActivity.class);
             intent.putExtra("ORDER_ID", order.getId());
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
         recyclerView.setHasFixedSize(true);
 

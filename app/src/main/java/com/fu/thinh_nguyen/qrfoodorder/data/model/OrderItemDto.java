@@ -1,17 +1,29 @@
 package com.fu.thinh_nguyen.qrfoodorder.data.model;
 
+import java.math.BigDecimal;
+
 public class OrderItemDto {
+    private Integer id;
     private Integer menuItemId;
     private String menuItemName;
+    private String image;
     private int quantity;
     private String note;
     private Double price;
+    private String status;
 
-    // Constructors
     public OrderItemDto() {
     }
 
     // Getters & Setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getMenuItemId() {
         return menuItemId;
     }
@@ -26,6 +38,14 @@ public class OrderItemDto {
 
     public void setMenuItemName(String menuItemName) {
         this.menuItemName = menuItemName;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public int getQuantity() {
@@ -50,5 +70,13 @@ public class OrderItemDto {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

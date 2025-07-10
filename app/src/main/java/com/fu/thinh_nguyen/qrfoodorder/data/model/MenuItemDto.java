@@ -1,8 +1,9 @@
 package com.fu.thinh_nguyen.qrfoodorder.data.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class MenuItemDto {
+public class MenuItemDto implements Serializable {
     private int id;
     private String name;
     private String description;

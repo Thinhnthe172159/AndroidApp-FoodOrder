@@ -1,5 +1,6 @@
 package com.fu.thinh_nguyen.qrfoodorder.ui.customer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -87,7 +88,9 @@ public class CustomerMainActivity extends BaseActivity {
     }
 
     private void onMenuItemClick(MenuItemDto menuItem) {
-        Toast.makeText(this, "Selected: " + menuItem.getName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, DetailMenuItem_Cus_Activity.class);
+        intent.putExtra("menuDetail", menuItem);
+        startActivity(intent);
     }
 
     private void setupSearchListener() {

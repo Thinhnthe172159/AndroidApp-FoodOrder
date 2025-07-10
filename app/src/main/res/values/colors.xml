@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primaryColor">#FF5722</color> <!-- hoặc màu tùy ý -->
 
     <!-- Primary colors for your app -->
     <color name="colorPrimary">#FF6200EE</color>
