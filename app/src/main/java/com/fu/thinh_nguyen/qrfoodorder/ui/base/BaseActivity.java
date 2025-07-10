@@ -13,8 +13,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.auth.LoginActivity;
+import com.fu.thinh_nguyen.qrfoodorder.ui.customer.CustomerMainActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.customer.ScanQRActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.customer.ViewOrderActivity;
+import com.fu.thinh_nguyen.qrfoodorder.ui.staff.StaffMainActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class BaseActivity extends AppCompatActivity {
@@ -33,6 +35,7 @@ public class BaseActivity extends AppCompatActivity {
         super.setContentView(fullView);
         drawerLayout = fullView.findViewById(R.id.drawer_layout);
         btnMenu       = fullView.findViewById(R.id.btn_menu);
+
 
         btnMenu.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
@@ -71,11 +74,45 @@ public class BaseActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
             }
+            if(item.getItemId() == R.id.nav_home){
+                TokenManager tokenManager = new TokenManager(this);
+                String role = tokenManager.getRole();
+                if ("Customer".equalsIgnoreCase(role)) {
+                    if (!this.getClass().equals(CustomerMainActivity.class)) {
+                        Intent intent = new Intent(this, CustomerMainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                    return true;
+                }
+
+                if("Staff".equalsIgnoreCase(role)){
+                    if (!this.getClass().equals(StaffMainActivity.class)) {
+                        Intent intent = new Intent(this, StaffMainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                    return true;
+                }
+            }
+
+
 
             return true;
         });
 
     }
+
+    protected void setupBackButton(ImageButton btnBack) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0 || !isTaskRoot()) {
+            btnBack.setVisibility(View.VISIBLE);
+            btnBack.setOnClickListener(v -> onBackPressed());
+        } else {
+            // Ẩn nếu không có màn hình trước (ví dụ màn hình gốc đầu tiên)
+            btnBack.setVisibility(View.GONE);
+        }
+    }
+
 
     private void SetButtonByRole(NavigationView navView){
         TokenManager tokenManager = new TokenManager(this);

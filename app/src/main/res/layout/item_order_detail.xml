@@ -16,16 +16,17 @@
         android:layout_height="wrap_content">
 
         <!-- Hình món ăn -->
+
+        <!-- Nội dung -->
         <ImageView
             android:id="@+id/imgFood"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_item_border"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_food_placeholder"
-            android:background="@drawable/bg_item_border" />
+            android:src="@drawable/ic_food_placeholder" />
 
-        <!-- Nội dung -->
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="0dp"

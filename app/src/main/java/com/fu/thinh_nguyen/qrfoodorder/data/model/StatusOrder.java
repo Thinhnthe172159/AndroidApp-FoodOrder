@@ -6,18 +6,20 @@ public class StatusOrder {
     public static final String CancelledStatus = "cancelled";
     public static final String PaidStatus = "paid";
 
+    public static final String Update = "update";
+
     public static String getStatus(String status) {
-        if (status.equals(PendingStatus)) {
-            return "Đang chờ";
-        }
-        if (status.equals(PreparingStatus)) {
-            return "Đang chuẩn bị";
-        }
-        if (status.equals(CancelledStatus)) {
-            return "Đã hủy";
-        }
-        if (status.equals(PaidStatus)) {
-            return "Đã thanh toán";
+        switch (status) {
+            case PendingStatus:
+                return "Đang chờ";
+            case PreparingStatus:
+                return "Đang chuẩn bị";
+            case CancelledStatus:
+                return "Đã hủy";
+            case PaidStatus:
+                return "Đã thanh toán";
+            case Update:
+                return "Cập nhật Đơn";
         }
         return null;
     }

@@ -45,6 +45,7 @@
         <activity android:name=".ui.base.ProfileActivity" />
         <activity android:name=".ui.customer.ViewOrderActivity" />
         <activity android:name=".ui.customer.OrderDetailActivity" />
+        <activity android:name=".ui.customer.DetailMenuItem_Cus_Activity" />
         <activity android:name=".ui.customer.QrTableStatusActivity" android:exported="false" />
 
     </application>

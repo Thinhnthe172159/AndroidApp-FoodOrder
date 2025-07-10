@@ -3,6 +3,7 @@ package com.fu.thinh_nguyen.qrfoodorder.data.api;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderCreateDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderItemCreateDto;
+import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderItemDto;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import retrofit2.http.*;
 public interface OrderService {
 
     /* ------------------------------------------------------------------
-     * 1.   (ORDER)
+     * 1.   ORDER
      * ---------------------------------------------------------------- */
 
     @GET("api/order")
@@ -39,26 +40,28 @@ public interface OrderService {
     @POST("api/order/getMyCurrentOrder")
     Call<List<OrderDto>> getMyCurrentOrder(@Header("Authorization") String token);
 
+    @POST("api/order/Confirm_order")
+    Call<Void> confirmOrder(
+            @Query("id") int id,
+            @Header("Authorization") String token
+    );
+
 
     /* ------------------------------------------------------------------
-     * 2.  (ORDER ITEM)
+     * 2.   ORDER ITEM
      * ---------------------------------------------------------------- */
 
     @GET("api/order/{orderId}/items")
     Call<List<OrderItemCreateDto>> getItemsByOrderId(@Path("orderId") int orderId);
 
     @POST("api/order/{orderId}/items")
-    Call<OrderItemCreateDto> addItem(
+    Call<Boolean> addItem(
             @Path("orderId") int orderId,
             @Body OrderItemCreateDto dto
     );
 
-    @PUT("api/order/{orderId}/items/{itemId}/quantity")
-    Call<Void> updateItemQuantity(
-            @Path("orderId") int orderId,
-            @Path("itemId") int itemId,
-            @Body int quantity
-    );
+    @POST("api/order/UpdateQuantityOrderItem")
+    Call<Void> updateQuantityOrderItem(@Body OrderItemDto dto);
 
     @DELETE("api/order/{orderId}/items/{itemId}")
     Call<Void> removeItem(

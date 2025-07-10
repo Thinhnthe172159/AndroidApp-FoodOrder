@@ -65,6 +65,7 @@ public class CustomerOrderAdapter extends RecyclerView.Adapter<CustomerOrderAdap
             txtOrderStatus.setText("Trạng thái :"+ StatusOrder.getStatus(order.getStatus()));
 
             itemView.setOnClickListener(v -> listener.onOrderClick(order));
+
         }
     }
 }
