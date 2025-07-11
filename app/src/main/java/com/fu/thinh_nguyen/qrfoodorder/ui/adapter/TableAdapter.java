@@ -83,7 +83,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
             switch (status.toLowerCase()) {
                 case "available": return "Trống";
                 case "occupied": return "Có khách";
-                case "reserved": return "Đã đặt";
+                //case "reserved": return "Đã đặt";
                 default: return status;
             }
         }
@@ -92,7 +92,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
             switch (status.toLowerCase()) {
                 case "available": return context.getResources().getColor(android.R.color.holo_green_light);
                 case "occupied": return context.getResources().getColor(android.R.color.holo_red_light);
-                case "reserved": return context.getResources().getColor(android.R.color.holo_orange_light);
+                /*case "reserved": return context.getResources().getColor(android.R.color.holo_orange_light);*/
                 default: return context.getResources().getColor(android.R.color.darker_gray);
             }
         }

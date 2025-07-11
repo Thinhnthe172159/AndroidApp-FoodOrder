@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +24,8 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
 
     public interface OnOrderClickListener {
         void onOrderClick(OrderDto order);
+        void onConfirmOrder(int orderId); // Xác nhận đơn hàng (pending/update -> preparing)
+        void onPayment(OrderDto order);      // Thanh toán (preparing -> paid)
     }
 
     public OrderTableAdapter(Context context, List<OrderDto> orderList) {
@@ -67,6 +70,8 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
         private TextView tvStatus;
         private TextView tvTotalAmount;
         private TextView tvItemCount;
+
+        private Button btnPayment;
         private RecyclerView rvOrderItems;
         private OrderItemAdapter orderItemAdapter;
 
@@ -82,6 +87,7 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
             tvTotalAmount = itemView.findViewById(R.id.tv_total_amount);
             tvItemCount = itemView.findViewById(R.id.tv_item_count);
             rvOrderItems = itemView.findViewById(R.id.rv_order_items);
+            btnPayment = itemView.findViewById(R.id.btn_payment);
 
             // Setup RecyclerView for order items
             rvOrderItems.setLayoutManager(new LinearLayoutManager(context));
@@ -109,7 +115,7 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
 
             // Table info
             if (order.getTableName() != null && !order.getTableName().isEmpty()) {
-                tvTableName.setText("Bàn: " + order.getTableName());
+                tvTableName.setText("" + order.getTableName());
                 tvTableName.setVisibility(View.VISIBLE);
             } else {
                 tvTableName.setVisibility(View.GONE);
@@ -150,7 +156,57 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
                 tvItemCount.setText("0 món");
                 rvOrderItems.setVisibility(View.GONE);
             }
+
+            // Setup Payment Button
+            setupPaymentButton(order);
         }
+
+        private void setupPaymentButton(OrderDto order) {
+            String status = order.getStatus();
+            if (status == null) {
+                btnPayment.setVisibility(View.GONE);
+                return;
+            }
+
+            switch (status.toLowerCase()) {
+                case "pending":
+                case "update":
+                    // Hiển thị button "Xác nhận đơn hàng"
+                    btnPayment.setVisibility(View.VISIBLE);
+                    btnPayment.setText("Xác nhận đơn hàng");
+                    btnPayment.setBackgroundColor(getButtonColor(status));
+                    btnPayment.setOnClickListener(v -> {
+                        if (onOrderClickListener != null) {
+                            onOrderClickListener.onConfirmOrder(order.getId());
+                        }
+                    });
+                    break;
+
+                case "preparing":
+                    // Hiển thị button "Thanh toán"
+                    btnPayment.setVisibility(View.VISIBLE);
+                    btnPayment.setText("Thanh toán");
+                    btnPayment.setBackgroundColor(getButtonColor(status));
+                    btnPayment.setOnClickListener(v -> {
+                        if (onOrderClickListener != null) {
+                            onOrderClickListener.onPayment(order);
+                        }
+                    });
+                    break;
+
+                case "cancelled":
+                case "paid":
+                    // Ẩn button
+                    btnPayment.setVisibility(View.GONE);
+                    break;
+
+                default:
+                    // Các trạng thái khác (ready, etc.) - ẩn button
+                    btnPayment.setVisibility(View.GONE);
+                    break;
+            }
+        }
+
 
         private String formatDate(String dateString) {
             try {
@@ -169,10 +225,8 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
 
             switch (status.toLowerCase()) {
                 case "pending": return "Chờ xử lý";
-                case "confirmed": return "Đã xác nhận";
                 case "preparing": return "Đang chuẩn bị";
-                case "ready": return "Sẵn sàng";
-                case "completed": return "Hoàn thành";
+                case "update": return "Cập nhật món";
                 case "cancelled": return "Đã hủy";
                 case "paid": return "Đã thanh toán";
                 default: return status;
@@ -185,13 +239,12 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
             switch (status.toLowerCase()) {
                 case "pending":
                     return context.getResources().getColor(android.R.color.holo_orange_light);
-                case "confirmed":
-                    return context.getResources().getColor(android.R.color.holo_blue_light);
                 case "preparing":
+                    return context.getResources().getColor(android.R.color.holo_blue_light);
+                case "update":
                     return context.getResources().getColor(android.R.color.holo_purple);
                 case "ready":
                     return context.getResources().getColor(android.R.color.holo_green_light);
-                case "completed":
                 case "paid":
                     return context.getResources().getColor(android.R.color.holo_green_dark);
                 case "cancelled":
@@ -200,5 +253,20 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
                     return context.getResources().getColor(android.R.color.darker_gray);
             }
         }
+
+        private int getButtonColor(String status) {
+            if (status == null) return context.getResources().getColor(android.R.color.darker_gray);
+
+            switch (status.toLowerCase()) {
+                case "pending":
+                case "update":
+                    return context.getResources().getColor(android.R.color.holo_orange_dark);
+                case "preparing":
+                    return context.getResources().getColor(android.R.color.holo_green_dark);
+                default:
+                    return context.getResources().getColor(android.R.color.darker_gray);
+            }
+        }
+
     }
 }

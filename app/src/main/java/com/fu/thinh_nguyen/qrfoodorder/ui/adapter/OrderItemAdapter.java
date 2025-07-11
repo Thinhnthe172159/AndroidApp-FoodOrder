@@ -52,6 +52,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
         private TextView tvUnitPrice;
         private TextView tvTotalPrice;
         private TextView tvNotes;
+        private TextView tvStatus;
 
         public OrderItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,12 +61,13 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
             tvUnitPrice = itemView.findViewById(R.id.tv_unit_price);
             tvTotalPrice = itemView.findViewById(R.id.tv_total_price);
             tvNotes = itemView.findViewById(R.id.tv_notes);
+            tvStatus = itemView.findViewById(R.id.tv_status_badge);
         }
 
         public void bind(OrderItemDto item) {
             // Null check cho product name - sử dụng getMenuItemName()
             tvProductName.setText(item.getMenuItemName() != null ? item.getMenuItemName() : "Món ăn");
-            tvQuantity.setText("x" + item.getQuantity());
+            tvQuantity.setText("SL: " + item.getQuantity());
 
             // Format currency
             NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
@@ -84,6 +86,33 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
                 tvNotes.setVisibility(View.VISIBLE);
             } else {
                 tvNotes.setVisibility(View.GONE);
+            }
+
+            // Status
+            tvStatus.setText(getStatusText(item.getStatus()));
+            tvStatus.setBackgroundColor(getStatusColor(item.getStatus()));
+        }
+
+        private String getStatusText(String status) {
+            if (status == null) return "Không xác định";
+
+            switch (status.toLowerCase()) {
+                case "pending": return "Chờ xử lý";
+                case "serving": return "Chuẩn bị món";
+                default: return status;
+            }
+        }
+
+        private int getStatusColor(String status) {
+            if (status == null) return context.getResources().getColor(android.R.color.darker_gray);
+
+            switch (status.toLowerCase()) {
+                case "pending":
+                    return context.getResources().getColor(android.R.color.holo_orange_light);
+                case "serving":
+                    return context.getResources().getColor(android.R.color.holo_purple);
+                default:
+                    return context.getResources().getColor(android.R.color.darker_gray);
             }
         }
 
