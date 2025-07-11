@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -21,35 +20,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRFoodOrder"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.staff.OrderListActivity"
-            android:exported="false" />
-        <activity android:name=".ui.auth.LoginActivity" />
 
-     
-        <activity android:name=".ui.staff.StaffMainActivity" />
-        <activity android:name=".ui.customer.CustomerMainActivity" />
+        <!-- Splash là activity đầu tiên -->
         <activity
-            android:name=".ui.manager.ManagerMainActivity"
-            />
-        <activity android:name=".ui.base.MainActivity"  android:exported="true">
-
+            android:name=".ui.base.SplashActivity"
+            android:theme="@style/Theme.QRFoodOrder"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.customer.ScanQRActivity"
-            android:exported="false" />
+
+        <!-- Onboarding -->
+        <activity android:name=".ui.base.OnboardingActivity" />
+
+        <!-- Các activity khác -->
+        <activity android:name=".ui.base.MainActivity" android:exported="true" />
+        <activity android:name=".ui.auth.LoginActivity" />
         <activity android:name=".ui.auth.RegisterActivity" />
         <activity android:name=".ui.base.ProfileActivity" />
+        <activity android:name=".ui.staff.OrderListActivity" android:exported="false" />
+        <activity android:name=".ui.staff.StaffMainActivity" />
+        <activity android:name=".ui.manager.ManagerMainActivity" />
+        <activity android:name=".ui.customer.CustomerMainActivity" />
+        <activity android:name=".ui.customer.ScanQRActivity" android:exported="false" />
         <activity android:name=".ui.customer.ViewOrderActivity" />
         <activity android:name=".ui.customer.OrderDetailActivity" />
         <activity android:name=".ui.customer.DetailMenuItem_Cus_Activity" />
+        <activity android:name=".ui.customer.ViewOrderItemDetailActivity" />
         <activity android:name=".ui.customer.QrTableStatusActivity" android:exported="false" />
-
     </application>
-
 </manifest>

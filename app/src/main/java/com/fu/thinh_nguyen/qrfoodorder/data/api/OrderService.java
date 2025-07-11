@@ -60,7 +60,7 @@ public interface OrderService {
     );
 
     @POST("api/order/UpdateQuantityOrderItem")
-    Call<Void> updateQuantityOrderItem(@Body OrderItemDto dto);
+    Call<Boolean> updateQuantityOrderItem(@Body OrderItemDto dto);
 
     @DELETE("api/order/{orderId}/items/{itemId}")
     Call<Void> removeItem(

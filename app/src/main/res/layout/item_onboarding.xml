@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- Hình ảnh lớn -->
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:scaleType="centerCrop"
+        android:contentDescription="image" />
+
+    <!-- Nội dung phía dưới, có nền bo góc -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal"
+        android:background="@drawable/bg_bottom_rounded">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#D84315"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textAlignment="center"
+            android:textColor="#888888"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="16dp" />
+
+        <!-- Indicator -->
+        <ImageView
+            android:id="@+id/indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/onboarding_indicator"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Nút chuyển -->
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FB8C00"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp" />
+    </LinearLayout>
+</LinearLayout>

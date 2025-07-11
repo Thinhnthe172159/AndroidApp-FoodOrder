@@ -1,8 +1,9 @@
 package com.fu.thinh_nguyen.qrfoodorder.data.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class OrderDto {
+public class OrderDto implements Serializable {
     private int id;
 
     private Integer customerId;

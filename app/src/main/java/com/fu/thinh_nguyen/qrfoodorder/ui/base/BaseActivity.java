@@ -87,7 +87,6 @@ public class BaseActivity extends AppCompatActivity {
                 if ("Customer".equalsIgnoreCase(role)) {
                     if (!this.getClass().equals(CustomerMainActivity.class)) {
                         Intent intent = new Intent(this, CustomerMainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     }
                     return true;
