@@ -1,11 +1,13 @@
 package com.fu.thinh_nguyen.qrfoodorder.ui.base;
 
+import android.Manifest;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -26,6 +28,7 @@ public class BaseActivity extends AppCompatActivity {
     private ImageButton btnMenu;
     private TokenManager tokenManager;
 
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     @Override
     public void setContentView(int layoutResID) {
         View fullView = LayoutInflater.from(this)
@@ -133,4 +136,11 @@ public class BaseActivity extends AppCompatActivity {
 
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SignalRClient.stop();
+    }
+
 }
