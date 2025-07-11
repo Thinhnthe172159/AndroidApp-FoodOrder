@@ -1,16 +1,21 @@
 package com.fu.thinh_nguyen.qrfoodorder.ui.staff;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.fu.thinh_nguyen.qrfoodorder.R;
+import com.fu.thinh_nguyen.qrfoodorder.data.api.OrderService;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
+import com.fu.thinh_nguyen.qrfoodorder.data.network.RetrofitClient;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.data.repository.TableRepository;
 import com.fu.thinh_nguyen.qrfoodorder.ui.adapter.OrderTableAdapter;
@@ -35,16 +40,27 @@ public class OrderListActivity extends BaseActivity implements OrderTableAdapter
     // Repository
     private TableRepository tableRepository;
     private TokenManager tokenManager;
+    private OrderService orderService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         setContentView(R.layout.activity_order_list);
 
         // Initialize repository
         tokenManager = new TokenManager(this);
         tableRepository = new TableRepository(tokenManager);
-
+        orderService = RetrofitClient.getInstance(tokenManager).create(OrderService.class);
         getIntentData();
         initViews();
         setupRecyclerView();
@@ -61,7 +77,7 @@ public class OrderListActivity extends BaseActivity implements OrderTableAdapter
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         tvTableTitle = findViewById(R.id.tv_table_title);
 
-        tvTableTitle.setText("Đơn hàng - Bàn " + tableNumber);
+        tvTableTitle.setText("Đơn hàng - " + tableNumber);
         swipeRefreshLayout.setOnRefreshListener(this::loadOrders);
     }
 
@@ -130,10 +146,70 @@ public class OrderListActivity extends BaseActivity implements OrderTableAdapter
         });
     }
 
-
     @Override
     public void onOrderClick(OrderDto order) {
         // Handle order click - có thể mở chi tiết đơn hàng
         Toast.makeText(this, "Clicked order #" + order.getId(), Toast.LENGTH_SHORT).show();
     }
+
+    // **THÊM 2 METHOD NÀY**
+    @Override
+    public void onConfirmOrder(int orderId) {
+        // Xử lý xác nhận đơn hàng (pending/update -> preparing)
+        //
+
+        orderService.confirmOrder(orderId).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(OrderListActivity.this, "Xác nhận đơn hàng #" + orderId + " thành công", Toast.LENGTH_SHORT).show();
+                    // Có thể load lại danh sách đơn hàng
+                    loadOrders();
+                } else {
+                    Toast.makeText(OrderListActivity.this, "Xác nhận thất bại!", Toast.LENGTH_SHORT).show();
+                    Log.e("OrderAction", "Confirm order failed: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(OrderListActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("OrderAction", "Confirm order error", t);
+            }
+        });
+    }
+
+    @Override
+    public void onPayment(OrderDto order) {
+        // Xử lý thanh toán (preparing -> paid)
+        Toast.makeText(this, "Thanh toán đơn hàng #" + order.getId(), Toast.LENGTH_SHORT).show();
+
+        // Log để debug
+        Log.d("OrderAction", "Payment for order: " + order.getId() + " - Amount: " + order.getTotalAmount());
+
+        // TODO: Thay thế bằng API call thực tế
+        processPayment(order);
+    }
+
+    // **THÊM CÁC METHOD XỬ LÝ API**
+    private void updateOrderStatus(String orderId, String newStatus) {
+        // TODO: Implement API call để update order status
+        // Tạm thời hiển thị message
+        Toast.makeText(this, "Đang cập nhật trạng thái đơn #" + orderId + " thành " + newStatus, Toast.LENGTH_SHORT).show();
+
+        // Sau khi API thành công, refresh lại danh sách
+        // loadOrders();
+    }
+
+    private void processPayment(OrderDto order) {
+        // TODO: Implement API call để xử lý thanh toán
+        // Tạm thời hiển thị message
+        Toast.makeText(this, "Đang xử lý thanh toán cho đơn #" + order.getId(), Toast.LENGTH_SHORT).show();
+
+        // Sau khi payment thành công, refresh lại danh sách
+        // loadOrders();
+    }
+
+
+
 }

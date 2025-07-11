@@ -42,8 +42,7 @@ public interface OrderService {
 
     @POST("api/order/Confirm_order")
     Call<Void> confirmOrder(
-            @Query("id") int id,
-            @Header("Authorization") String token
+            @Query("id") int orderId
     );
 
 
