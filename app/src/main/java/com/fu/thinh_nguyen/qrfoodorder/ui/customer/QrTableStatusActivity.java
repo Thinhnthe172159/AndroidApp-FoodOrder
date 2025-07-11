@@ -2,27 +2,26 @@ package com.fu.thinh_nguyen.qrfoodorder.ui.customer;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresPermission;
+
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.api.OrderService;
-import com.fu.thinh_nguyen.qrfoodorder.data.api.TableService;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderCreateDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
-import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderItemCreateDto;
-import com.fu.thinh_nguyen.qrfoodorder.data.model.TableStatusUpdateDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.network.RetrofitClient;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.base.BaseActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,6 +34,7 @@ public class QrTableStatusActivity extends BaseActivity {
     private int tableId;
     private String tableStatus;
 
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,12 +62,17 @@ public class QrTableStatusActivity extends BaseActivity {
 
         btnReserve.setOnClickListener(v -> reserveTable(tableId));
 
-        btnCancel.setOnClickListener(v -> finish());
+        btnCancel.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CustomerMainActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void reserveTable(int tableId) {
         TokenManager tm = new TokenManager(this);
         OrderService orderService = RetrofitClient.getInstance(tm).create(OrderService.class);
+
         OrderCreateDto createDto = new OrderCreateDto();
         createDto.setTableId(tableId);
         createDto.setCustomerId(0);
@@ -78,8 +83,16 @@ public class QrTableStatusActivity extends BaseActivity {
             public void onResponse(Call<OrderDto> call, Response<OrderDto> response) {
                 Log.d(TAG, "onResponse: " + response.code() + " " + response.message());
                 Log.d("TOKEN", "Bearer " + tm.get());
-                if (response.isSuccessful()) {
+
+                if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(QrTableStatusActivity.this, "Đặt bàn thành công", Toast.LENGTH_SHORT).show();
+
+                    int orderId = response.body().getId();
+
+                    Intent intent = new Intent(QrTableStatusActivity.this, OrderDetailActivity.class);
+                    intent.putExtra("ORDER_ID", orderId);
+                    startActivity(intent);
+
                     finish();
                 } else {
                     Toast.makeText(QrTableStatusActivity.this, "Đặt bàn thất bại", Toast.LENGTH_SHORT).show();
@@ -87,10 +100,10 @@ public class QrTableStatusActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<OrderDto> call, Throwable throwable) {
-
+            public void onFailure(Call<OrderDto> call, Throwable t) {
+                Toast.makeText(QrTableStatusActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFailure: ", t);
             }
         });
-
     }
 }

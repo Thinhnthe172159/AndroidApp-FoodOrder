@@ -1,5 +1,6 @@
 package com.fu.thinh_nguyen.qrfoodorder.ui.customer;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.RequiresPermission;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -49,6 +51,7 @@ public class DetailMenuItem_Cus_Activity extends BaseActivity {
     private OrderService orderService;
     private List<OrderDto> orderDtoList;
 
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
