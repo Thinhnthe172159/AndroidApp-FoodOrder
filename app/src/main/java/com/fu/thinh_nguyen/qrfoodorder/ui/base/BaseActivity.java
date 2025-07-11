@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.fu.thinh_nguyen.qrfoodorder.Notification.SignalRClient;
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.auth.LoginActivity;
@@ -23,6 +24,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected DrawerLayout drawerLayout;
     private ImageButton btnMenu;
+    private TokenManager tokenManager;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -36,6 +38,8 @@ public class BaseActivity extends AppCompatActivity {
         drawerLayout = fullView.findViewById(R.id.drawer_layout);
         btnMenu       = fullView.findViewById(R.id.btn_menu);
 
+        tokenManager = new TokenManager(this);
+        SignalRClient.start(this, tokenManager);
 
         btnMenu.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 

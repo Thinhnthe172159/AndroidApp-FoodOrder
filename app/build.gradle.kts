@@ -57,6 +57,8 @@ dependencies {
     implementation ("androidx.camera:camera-camera2:1.2.3")
     implementation ("androidx.camera:camera-lifecycle:1.2.3")
     implementation ("androidx.camera:camera-view:1.2.3")
+    implementation ("com.microsoft.signalr:signalr:6.0.2")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.6")
 
     implementation(libs.appcompat)
     implementation(libs.material)
