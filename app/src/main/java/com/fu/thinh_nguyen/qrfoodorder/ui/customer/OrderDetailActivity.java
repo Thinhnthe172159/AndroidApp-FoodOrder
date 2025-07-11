@@ -3,6 +3,7 @@ package com.fu.thinh_nguyen.qrfoodorder.ui.customer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fu.thinh_nguyen.qrfoodorder.Notification.SignalRClient;
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.api.OrderService;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
@@ -34,6 +36,7 @@ public class OrderDetailActivity extends BaseActivity {
     private TextView txtOrderTitle, txtOrderType, txtOrderPhone, txtOrderAddress, txtOrderTime, totalPrice;
 
     private OrderService orderService;
+    private String mess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,9 @@ public class OrderDetailActivity extends BaseActivity {
             Toast.makeText(this, "Không tìm thấy mã đơn hàng", Toast.LENGTH_SHORT).show();
             finish();
         }
+
+        Button btnNotify = findViewById(R.id.btnNotifyStaff);
+        btnNotify.setOnClickListener(v -> sendNotificationToStaff());                                                                                                                                                                                            mess = "Thành ăn cứt";
     }
 
     private void fetchOrderDetail(int orderId) {
@@ -102,4 +108,20 @@ public class OrderDetailActivity extends BaseActivity {
         OrderItemAdapter2 adapter = new OrderItemAdapter2(items);
         recyclerOrderItems.setAdapter(adapter);
     }
+
+    private void sendNotificationToStaff() {
+        int orderId = getIntent().getIntExtra("ORDER_ID", -1);
+        if (orderId == -1) return;
+
+        TokenManager tokenManager = new TokenManager(this);
+        String senderId = tokenManager.getUserId();
+        String senderName = tokenManager.getUserName();
+
+        String title = "Yêu cầu xác nhận đơn #" + orderId;
+        String message = "Khách hàng yêu cầu xác nhận đơn #" + orderId + mess;
+
+        SignalRClient.sendToAllStaff(title, message);
+        Toast.makeText(this, "Đã gửi yêu cầu tới nhân viên", Toast.LENGTH_SHORT).show();
+    }
+
 }

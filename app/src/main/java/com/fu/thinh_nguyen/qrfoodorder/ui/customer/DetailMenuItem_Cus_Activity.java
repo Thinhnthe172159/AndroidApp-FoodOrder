@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,6 +114,17 @@ public class DetailMenuItem_Cus_Activity extends BaseActivity {
                 updateTotalPrice();
             }
         });
+
+        EditText edtNote = findViewById(R.id.edtNote);
+        ScrollView scrollView = findViewById(R.id.scrollView);
+
+        edtNote.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                scrollView.postDelayed(() -> scrollView.smoothScrollTo(0, edtNote.getBottom()), 200);
+            }
+        });
+
+
 
         getOrderList();
     }

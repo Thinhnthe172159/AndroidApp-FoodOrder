@@ -73,6 +73,8 @@ public class LoginActivity extends AppCompatActivity{
                         tokenManager.save(response.body().getToken());
                         String role = response.body().getUser().getRoleName();
                         tokenManager.saveRole(role);
+                        tokenManager.saveUserId(response.body().getUser().getId()+"");
+                        tokenManager.saveUserName(response.body().getUser().getFullName());
                         goToRole(role);
                     } else {
                         Toast.makeText(LoginActivity.this, "Sai user hoặc mật khẩu, Vui lòng kiểm tra lại", Toast.LENGTH_SHORT).show();
