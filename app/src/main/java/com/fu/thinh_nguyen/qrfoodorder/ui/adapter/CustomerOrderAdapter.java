@@ -25,6 +25,7 @@ import retrofit2.Response;
 
 public class CustomerOrderAdapter extends RecyclerView.Adapter<CustomerOrderAdapter.OrderViewHolder> {
 
+    private final boolean readonly;
     private List<OrderDto> orderList;
     private final OnOrderClickListener listener;
     private final OrderService orderService;
@@ -35,13 +36,18 @@ public class CustomerOrderAdapter extends RecyclerView.Adapter<CustomerOrderAdap
         void onOrderClick(OrderDto order);
     }
 
-    public CustomerOrderAdapter(List<OrderDto> orderList, OnOrderClickListener listener,
-                                Context context, OrderService orderService, Runnable refreshList) {
+    public CustomerOrderAdapter(List<OrderDto> orderList,
+                                OnOrderClickListener listener,
+                                Context context,
+                                OrderService orderService,
+                                Runnable refreshList,
+                                boolean readonly) {
         this.orderList = orderList;
         this.listener = listener;
         this.context = context;
         this.orderService = orderService;
         this.refreshList = refreshList;
+        this.readonly = readonly;
     }
 
     @NonNull
@@ -54,7 +60,7 @@ public class CustomerOrderAdapter extends RecyclerView.Adapter<CustomerOrderAdap
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         OrderDto order = orderList.get(position);
-        holder.bind(order, listener, orderService, context, refreshList);
+        holder.bind(order, listener, orderService, context, refreshList, readonly);
     }
 
     @Override
@@ -78,12 +84,21 @@ public class CustomerOrderAdapter extends RecyclerView.Adapter<CustomerOrderAdap
             btnCancelOrder = itemView.findViewById(R.id.btnCancelOrder);
         }
 
-        public void bind(OrderDto order, OnOrderClickListener listener,
-                         OrderService orderService, Context context, Runnable refreshList) {
+        public void bind(OrderDto order,
+                         OnOrderClickListener listener,
+                         OrderService orderService,
+                         Context context,
+                         Runnable refreshList,
+                         boolean readonly) {
 
             txtOrderId.setText("Đơn đặt bàn số: " + order.getId());
             txtOrderStatus.setText("Trạng thái: " + StatusOrder.getStatus(order.getStatus()));
             itemView.setOnClickListener(v -> listener.onOrderClick(order));
+
+            if (readonly) {
+                btnCancelOrder.setVisibility(View.GONE);
+                return;
+            }
 
             if (!"pending".equalsIgnoreCase(order.getStatus())) {
                 btnCancelOrder.setVisibility(View.GONE);

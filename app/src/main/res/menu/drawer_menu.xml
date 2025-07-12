@@ -19,6 +19,11 @@
         android:icon="@drawable/ic_order"
         android:visible="false" />
     <item
+        android:id="@+id/view_my_order_history"
+        android:title="Lịch sử order"
+        android:icon="@drawable/baseline_access_time_24"
+        android:visible="false" />
+    <item
         android:id="@+id/nav_logout"
         android:title="Đăng xuất"
         android:icon="@drawable/ic_logout" />
