@@ -15,6 +15,8 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fu.thinh_nguyen.qrfoodorder.R;
@@ -81,14 +83,20 @@ public class CustomerMainActivity extends BaseActivity {
 
 
     private void setupRecyclerViews() {
-        // Setup menu items RecyclerView
+        // Setup menu items RecyclerView (vertical list)
         menuItemAdapter = new MenuItemAdapter(this::onMenuItemClick);
+        menuItemsRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         menuItemsRecyclerView.setAdapter(menuItemAdapter);
+        menuItemsRecyclerView.setHasFixedSize(true); // Optional: for better performance
 
-        // Setup categories RecyclerView
+        // Setup categories RecyclerView (horizontal list)
         categoryAdapter = new CategoryAdapter(this::onCategoryClick);
+        categoriesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         categoriesRecyclerView.setAdapter(categoryAdapter);
+        categoriesRecyclerView.setHasFixedSize(true); // Optional: for better performance
     }
+
+
 
     private void onMenuItemClick(MenuItemDto menuItem) {
         Intent intent = new Intent(this, DetailMenuItem_Cus_Activity.class);
