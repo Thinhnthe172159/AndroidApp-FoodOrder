@@ -16,6 +16,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.ui.staff.OrderListActivity;
+import com.fu.thinh_nguyen.qrfoodorder.ui.staff.StaffMainActivity;
 
 public class NotificationHelper {
     private static final String CHANNEL_ID = "default_channel";
@@ -73,8 +74,7 @@ public class NotificationHelper {
     public static void showNotificationWithData(Context context, String title, String message, String orderId, String tableId) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Tạo Intent với dữ liệu ẩn
-        Intent intent = new Intent(context, OrderListActivity.class);
+        Intent intent = new Intent(context, StaffMainActivity.class);
         intent.putExtra("orderId", orderId);
         intent.putExtra("tableId", tableId);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

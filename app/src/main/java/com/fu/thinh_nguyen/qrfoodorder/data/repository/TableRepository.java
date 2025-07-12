@@ -46,7 +46,7 @@ public class TableRepository {
 
         OrderSearchDto searchDto = new OrderSearchDto();
         searchDto.setTableId(tableId);
-        searchDto.setCreatedAt("today");
+        //searchDto.setCreatedAt("today");
         searchDto.setItems(new ArrayList<>());
 
         Call<List<OrderDto>> call = tableService.searchOrdersByTable(searchDto);
