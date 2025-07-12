@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.api.OrderService;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderItemDto;
+import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderItemStatus;
 import com.fu.thinh_nguyen.qrfoodorder.data.network.RetrofitClient;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.customer.ViewOrderItemDetailActivity;
@@ -71,7 +72,7 @@ public class OrderItemAdapter2 extends RecyclerView.Adapter<OrderItemAdapter2.It
 
         holder.txtPrice.setText("Giá: " + formatVND((double)item.getPrice()));
 
-        holder.txtTime.setText(item.getStatus());
+        holder.txtTime.setText(OrderItemStatus.getStatusText(item.getStatus()));
 
         // Load ảnh
         Glide.with(holder.imgFood.getContext())

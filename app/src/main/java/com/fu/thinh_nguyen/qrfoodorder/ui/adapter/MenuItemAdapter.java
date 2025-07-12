@@ -69,7 +69,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         private TextView descriptionTextView;
         private TextView priceTextView;
         private TextView categoryTextView;
-        private View availabilityIndicator;
 
         public MenuItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,7 +77,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
             descriptionTextView = itemView.findViewById(R.id.menuItemDescription);
             priceTextView = itemView.findViewById(R.id.menuItemPrice);
             categoryTextView = itemView.findViewById(R.id.menuItemCategory);
-            availabilityIndicator = itemView.findViewById(R.id.availabilityIndicator);
 
             itemView.setOnClickListener(v -> {
                 if (listener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
@@ -108,15 +106,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
                 categoryTextView.setVisibility(View.VISIBLE);
             } else {
                 categoryTextView.setVisibility(View.GONE);
-            }
-
-            // Set availability indicator
-            if (menuItem.getIsAvailable() != null && menuItem.getIsAvailable()) {
-                availabilityIndicator.setBackgroundColor(context.getResources().getColor(android.R.color.holo_green_light));
-                itemView.setAlpha(1.0f);
-            } else {
-                availabilityIndicator.setBackgroundColor(context.getResources().getColor(android.R.color.holo_red_light));
-                itemView.setAlpha(0.6f);
             }
 
             // Load image - ĐƠN GIẢN HƠN NHIỀU

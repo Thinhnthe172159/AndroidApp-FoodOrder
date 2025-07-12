@@ -3,16 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="6dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardElevation="6dp"
+    app:strokeWidth="0dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Image Container -->
+        <!-- Image Container với Price overlay -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="120dp">
@@ -24,14 +28,28 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_restaurant" />
 
-            <!-- Availability Indicator -->
-            <View
-                android:id="@+id/availabilityIndicator"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_gravity="top|end"
+            <!-- Price - Góc dưới phải của ảnh -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
                 android:layout_margin="8dp"
-                android:background="@drawable/circle_background" />
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/price_color">
+
+                <TextView
+                    android:id="@+id/menuItemPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$0.00"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp" />
+
+            </com.google.android.material.card.MaterialCardView>
 
         </FrameLayout>
 
@@ -40,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="10dp">
 
             <!-- Menu Item Name -->
             <TextView
@@ -50,45 +68,59 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="Menu Item Name"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:lineSpacingExtra="1dp" />
 
-            <!-- Description -->
+            <!-- Description - Chỉ 3 dòng với ellipsize -->
             <TextView
                 android:id="@+id/menuItemDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
-                android:maxLines="2"
-                android:text="Description"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp" />
+                android:maxLines="3"
+                android:text="Description text here. This is a longer description to show how it handles multiple lines and ellipsize when content is too long..."
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:lineSpacingExtra="1dp"
+                android:alpha="0.8" />
 
-            <!-- Category -->
-            <TextView
-                android:id="@+id/menuItemCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/category_chip_background"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="2dp"
-                android:text="Category"
-                android:textColor="@color/design_default_color_primary"
-                android:textSize="10sp" />
-
-            <!-- Price -->
-            <TextView
-                android:id="@+id/menuItemPrice"
+            <!-- Bottom Row - Category và Rating -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="$0.00"
-                android:textColor="@color/design_default_color_primary"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- Category Chip -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/menuItemCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Category"
+                    android:textSize="10sp"
+                    app:chipBackgroundColor="@color/chip_background"
+                    app:chipCornerRadius="12dp"
+                    app:chipMinHeight="22dp"
+                    app:chipStrokeWidth="0dp" />
+
+                <!-- Rating Section -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="4dp">
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
