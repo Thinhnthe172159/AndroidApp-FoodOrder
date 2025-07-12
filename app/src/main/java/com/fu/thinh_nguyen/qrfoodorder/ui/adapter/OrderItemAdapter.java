@@ -80,7 +80,6 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
             double totalPrice = price * item.getQuantity();
             tvTotalPrice.setText(formatter.format(totalPrice) + "đ");
 
-            // Notes - sử dụng getNote() thay vì getNotes()
             if (item.getNote() != null && !item.getNote().trim().isEmpty()) {
                 tvNotes.setText("Ghi chú: " + item.getNote());
                 tvNotes.setVisibility(View.VISIBLE);
@@ -99,6 +98,9 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
             switch (status.toLowerCase()) {
                 case "pending": return "Chờ xử lý";
                 case "serving": return "Chuẩn bị món";
+                case "update": return "Cập nhật số lượng";
+                case "cancelled": return "Đã huỷ";
+                case "paid" : return "Đã thanh toán";
                 default: return status;
             }
         }
@@ -109,8 +111,14 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
             switch (status.toLowerCase()) {
                 case "pending":
                     return context.getResources().getColor(android.R.color.holo_orange_light);
-                case "serving":
+                case "preparing":
+                    return context.getResources().getColor(android.R.color.holo_blue_light);
+                case "update":
                     return context.getResources().getColor(android.R.color.holo_purple);
+                case "paid":
+                    return context.getResources().getColor(android.R.color.holo_green_dark);
+                case "cancelled":
+                    return context.getResources().getColor(android.R.color.holo_red_light);
                 default:
                     return context.getResources().getColor(android.R.color.darker_gray);
             }

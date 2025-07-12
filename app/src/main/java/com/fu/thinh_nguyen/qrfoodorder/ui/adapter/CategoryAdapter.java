@@ -65,13 +65,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     class CategoryViewHolder extends RecyclerView.ViewHolder {
         private TextView categoryName;
-        private TextView itemCount;
         private View categoryContainer;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
             categoryName = itemView.findViewById(R.id.categoryName);
-            itemCount = itemView.findViewById(R.id.categoryItemCount);
             categoryContainer = itemView.findViewById(R.id.categoryContainer);
 
             itemView.setOnClickListener(v -> {
@@ -84,7 +82,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         public void bind(CategoryDto category, boolean isSelected) {
             categoryName.setText(category.getName());
-            itemCount.setText(String.valueOf(category.getMenuItemCount()));
 
             // Highlight selected category
             if (isSelected) {
