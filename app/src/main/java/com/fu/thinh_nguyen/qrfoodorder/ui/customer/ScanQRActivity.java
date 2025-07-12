@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
 import androidx.camera.core.*;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
@@ -42,6 +43,7 @@ public class ScanQRActivity extends BaseActivity {
     private Executor executor;
 
     private boolean isProcessing = false;
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

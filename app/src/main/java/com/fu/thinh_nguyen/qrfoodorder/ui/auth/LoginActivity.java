@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.fu.thinh_nguyen.qrfoodorder.data.model.AuthResponseDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.LoginDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.network.RetrofitClient;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
+import com.fu.thinh_nguyen.qrfoodorder.ui.base.MainActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.customer.CustomerMainActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.manager.ManagerMainActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.staff.StaffMainActivity;
@@ -26,6 +28,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity{
     private EditText edtUser, edtPass;
+    private ImageButton btnBack;
     private TokenManager tokenManager;
     private ApiService api;
 
@@ -37,6 +40,7 @@ public class LoginActivity extends AppCompatActivity{
 
         edtUser = findViewById(R.id.edtUsername);
         edtPass = findViewById(R.id.edtPassword);
+        btnBack = findViewById(R.id.btnBack);
         Button btnLogin = findViewById(R.id.btnLogin);
 
         tokenManager = new TokenManager(this);
@@ -46,6 +50,13 @@ public class LoginActivity extends AppCompatActivity{
             String u = edtUser.getText().toString().trim();
             String p = edtPass.getText().toString().trim();
             doLogin(u, p);
+        });
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish(); // Optional: close LoginActivity so it's not in back stack
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right); // Optional animation
         });
         ViewPassword();
     }
