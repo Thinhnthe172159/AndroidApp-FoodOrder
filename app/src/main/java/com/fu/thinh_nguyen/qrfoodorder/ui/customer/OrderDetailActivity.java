@@ -25,7 +25,7 @@ import com.fu.thinh_nguyen.qrfoodorder.data.network.RetrofitClient;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.adapter.OrderItemAdapter2;
 import com.fu.thinh_nguyen.qrfoodorder.ui.base.BaseActivity;
-import com.fu.thinh_nguyen.qrfoodorder.ui.base.VNPayActivity;
+import com.fu.thinh_nguyen.qrfoodorder.ui.base.PaymentGate;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -160,7 +160,7 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void openPaymentGateway() {
-        Intent intent = new Intent(this, VNPayActivity.class);
+        Intent intent = new Intent(this, PaymentGate.class);
         intent.putExtra("ORDER_ID", order.getId());
         startActivity(intent);
     }

@@ -45,6 +45,9 @@ public interface OrderService {
             @Query("id") int orderId
     );
 
+    @POST("api/order/MarkAsPaid/{id}")
+    Call<Void> markOrderAsPaid(@Path("id") int orderId);
+
 
     /* ------------------------------------------------------------------
      * 2.   ORDER ITEM

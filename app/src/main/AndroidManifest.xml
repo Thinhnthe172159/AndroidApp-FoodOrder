@@ -49,6 +49,7 @@
         <activity android:name=".ui.customer.OrderDetailActivity" />
         <activity android:name=".ui.customer.DetailMenuItem_Cus_Activity" />
         <activity android:name=".ui.customer.ViewOrderItemDetailActivity" />
+        <activity android:name=".ui.base.PaymentGate"/>
         <activity android:name=".ui.customer.QrTableStatusActivity" android:exported="false" />
     </application>
 </manifest>

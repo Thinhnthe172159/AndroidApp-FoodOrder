@@ -6,6 +6,8 @@ import com.fu.thinh_nguyen.qrfoodorder.data.model.CurrentUserDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.LoginDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.MenuItemDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.MenuSearchFilter;
+import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderIdRequest;
+import com.fu.thinh_nguyen.qrfoodorder.data.model.PayOSResponse;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.RegisterDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.UserDto;
 
@@ -33,5 +35,9 @@ public interface ApiService {
 
     @GET("api/Auth/me")
     Call<CurrentUserDto> getCurrentUser();
+
+    @POST("api/Payment/payos")
+    Call<PayOSResponse> getPayOSCheckoutUrl(@Query("orderId") int orderId);
+
 
 }
