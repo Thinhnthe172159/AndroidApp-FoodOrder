@@ -17,6 +17,7 @@ import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
 import com.fu.thinh_nguyen.qrfoodorder.ui.auth.LoginActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.customer.CustomerMainActivity;
+import com.fu.thinh_nguyen.qrfoodorder.ui.customer.OrderHistoryActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.customer.ScanQRActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.customer.ViewOrderActivity;
 import com.fu.thinh_nguyen.qrfoodorder.ui.staff.StaffMainActivity;
@@ -81,6 +82,11 @@ public class BaseActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
             }
+            if(item.getItemId() == R.id.view_my_order_history){
+                startActivity(new Intent(this, OrderHistoryActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                return true;
+            }
             if(item.getItemId() == R.id.nav_home){
                 TokenManager tokenManager = new TokenManager(this);
                 String role = tokenManager.getRole();
@@ -126,6 +132,7 @@ public class BaseActivity extends AppCompatActivity {
         if("customer".equalsIgnoreCase(role)){
             navView.getMenu().findItem(R.id.nav_scan_qr).setVisible(true);
             navView.getMenu().findItem(R.id.view_my_order).setVisible(true);
+            navView.getMenu().findItem(R.id.view_my_order_history).setVisible(true);
         }
         // them button staff
         if("staff".equalsIgnoreCase(role)){

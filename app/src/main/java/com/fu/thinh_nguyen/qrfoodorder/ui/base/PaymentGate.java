@@ -1,6 +1,9 @@
 package com.fu.thinh_nguyen.qrfoodorder.ui.base;
 
+import static com.fu.thinh_nguyen.qrfoodorder.Notification.SignalRClient.sendToAllStaff;
+
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,11 +13,13 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.api.ApiService;
 import com.fu.thinh_nguyen.qrfoodorder.data.api.OrderService;
+import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderIdRequest;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.PayOSResponse;
 import com.fu.thinh_nguyen.qrfoodorder.data.network.RetrofitClient;
@@ -27,6 +32,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Date;
+import java.time.LocalDateTime;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +44,7 @@ public class PaymentGate extends AppCompatActivity {
     private ProgressBar loadingBar;
     private WebView webView;
     private int orderId = -1;
+    private OrderDto orderDto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,7 @@ public class PaymentGate extends AppCompatActivity {
         setContentView(R.layout.activity_payos);
 
         orderId = getIntent().getIntExtra("ORDER_ID", -1);
+        orderDto = (OrderDto) getIntent().getSerializableExtra("ORDER_DTO");
         webView = findViewById(R.id.webViewPayOS);
         webView.getSettings().setJavaScriptEnabled(true);
         loadingBar = findViewById(R.id.loadingBar);
@@ -91,18 +100,19 @@ public class PaymentGate extends AppCompatActivity {
     private void openPayOSWebview(String checkoutUrl) {
         loadingBar.setVisibility(View.VISIBLE);
         webView.setWebViewClient(new WebViewClient() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onPageFinished(WebView view, String url) {
                 loadingBar.setVisibility(View.GONE);
-
                 if (url.contains("status=PAID")) {
                     Toast.makeText(PaymentGate.this, "Xác nhận thanh toán...", Toast.LENGTH_SHORT).show();
-
+                    sendToAllStaff("Thanh toán thành công","Khách hàng "+ orderDto.getCustomerName()+" bàn "+orderDto.getTableId() + " thanh toán thành công");
                     // Gọi API markAsPaid
                     TokenManager tokenManager = new TokenManager(PaymentGate.this);
                     OrderService orderService = RetrofitClient.getInstance(tokenManager).create(OrderService.class);
 
                     orderService.markOrderAsPaid(orderId).enqueue(new Callback<Void>() {
+                        @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             Toast.makeText(PaymentGate.this, "Đã thanh toán thành công!", Toast.LENGTH_SHORT).show();
@@ -126,6 +136,7 @@ public class PaymentGate extends AppCompatActivity {
 
                 } else if (url.contains("status=CANCELLED") || url.contains("status=FAILED")) {
                     Toast.makeText(PaymentGate.this, "Thanh toán thất bại hoặc bị hủy", Toast.LENGTH_SHORT).show();
+                    Log.d("PaymentGate", orderDto.getCustomerName());
                     showReturnScreen(); // Cho phép quay lại sau 1 phút
                 }
             }

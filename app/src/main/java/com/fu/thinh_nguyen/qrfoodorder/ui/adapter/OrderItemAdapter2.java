@@ -82,9 +82,15 @@ public class OrderItemAdapter2 extends RecyclerView.Adapter<OrderItemAdapter2.It
                 .into(holder.imgFood);
 
         // Ẩn hoặc hiển thị nút hủy/track theo trạng thái
-        boolean isPending = item.getStatus().equalsIgnoreCase("Pending");
-        holder.btnCancel.setVisibility(isPending ? View.VISIBLE : View.GONE);
-        holder.btnTrack.setVisibility(isPending ? View.VISIBLE : View.GONE);
+        boolean isPending = true;
+        if(item.getStatus().equalsIgnoreCase(OrderItemStatus.PENDING) || item.getStatus().equalsIgnoreCase(OrderItemStatus.Update)) {
+            isPending = true;
+        } else {
+            isPending = false;
+        }
+
+            holder.btnCancel.setVisibility(isPending ? View.VISIBLE : View.GONE);
+            holder.btnTrack.setVisibility(isPending ? View.VISIBLE : View.GONE);
 
         holder.btnCancel.setOnClickListener(v -> doDelete(orderId, item));
 
