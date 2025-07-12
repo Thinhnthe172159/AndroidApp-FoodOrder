@@ -62,6 +62,88 @@ public class StaffMainActivity extends BaseActivity implements TableAdapter.OnTa
         initViews();
         setupRecyclerView();
         loadTables();
+
+        handleNotificationIntent();
+    }
+
+    private void handleNotificationIntent() {
+        Intent intent = getIntent();
+        String orderIdFromNotification = intent.getStringExtra("orderId");
+        String tableIdFromNotification = intent.getStringExtra("tableId");
+
+        if (orderIdFromNotification != null && tableIdFromNotification != null) {
+            try {
+                int tableId = Integer.parseInt(tableIdFromNotification);
+
+                Toast.makeText(this, "Mở từ thông báo - Đơn: " + orderIdFromNotification + ", Bàn: " + tableId, Toast.LENGTH_SHORT).show();
+
+                // Tìm table trong danh sách và gọi onTableClick
+                findTableAndOpenOrderList(tableId);
+
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Dữ liệu thông báo không hợp lệ", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void findTableAndOpenOrderList(int targetTableId) {
+        // Nếu danh sách table đã load xong
+        if (tableList != null && !tableList.isEmpty()) {
+            for (TableDto table : tableList) {
+                if (table.getId() == targetTableId) {
+                    // Gọi onTableClick với table tìm được
+                    onTableClick(table);
+                    return;
+                }
+            }
+            // Nếu không tìm thấy table, tạo table object tạm thời
+            createTemporaryTableAndOpen(targetTableId);
+        } else {
+            // Nếu danh sách chưa load, đợi load xong rồi tìm
+            waitForTablesLoadedThenOpen(targetTableId);
+        }
+    }
+
+    private void createTemporaryTableAndOpen(int tableId) {
+        // Tạo table object tạm thời để gọi onTableClick
+        TableDto tempTable = new TableDto();
+        tempTable.setId(tableId);
+        tempTable.setTableNumber("Bàn " + tableId); // Tên tạm thời
+
+        onTableClick(tempTable);
+    }
+
+    private void waitForTablesLoadedThenOpen(int targetTableId) {
+        // Override lại loadTables để xử lý sau khi load xong
+        swipeRefreshLayout.setRefreshing(true);
+
+        tableRepository.getTables(new Callback<List<TableDto>>() {
+            @Override
+            public void onResponse(Call<List<TableDto>> call, Response<List<TableDto>> response) {
+                swipeRefreshLayout.setRefreshing(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    tableList.clear();
+                    tableList.addAll(response.body());
+                    tableAdapter.updateTables(tableList);
+
+                    // Sau khi load xong, tìm table và mở
+                    findTableAndOpenOrderList(targetTableId);
+                } else {
+                    Toast.makeText(StaffMainActivity.this, "Lỗi tải dữ liệu Table", Toast.LENGTH_SHORT).show();
+                    // Vẫn mở với thông tin tạm thời
+                    createTemporaryTableAndOpen(targetTableId);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<TableDto>> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(StaffMainActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                // Vẫn mở với thông tin tạm thời
+                createTemporaryTableAndOpen(targetTableId);
+            }
+        });
     }
 
     private void initViews() {
@@ -81,6 +163,15 @@ public class StaffMainActivity extends BaseActivity implements TableAdapter.OnTa
     }
 
     private void loadTables() {
+        // Chỉ load nếu không phải từ notification
+        Intent intent = getIntent();
+        String orderIdFromNotification = intent.getStringExtra("orderId");
+
+        if (orderIdFromNotification != null) {
+            // Đã xử lý trong handleNotificationIntent()
+            return;
+        }
+
         swipeRefreshLayout.setRefreshing(true);
 
         tableRepository.getTables(new Callback<List<TableDto>>() {
@@ -104,6 +195,7 @@ public class StaffMainActivity extends BaseActivity implements TableAdapter.OnTa
             }
         });
     }
+
 
     @Override
     public void onTableClick(TableDto table) {

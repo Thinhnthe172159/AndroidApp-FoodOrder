@@ -28,11 +28,14 @@ public class SignalRClient {
                 .withAccessTokenProvider(Single.defer(() -> Single.just(jwtToken)))
                 .build();
 
-        // Nhận thông báo từ server
-        hubConnection.on("ReceiveNotification", (title, message, senderId, senderName) -> {
-            Log.d(TAG, "Nhận thông báo từ: " + senderName + " - " + title);
-            NotificationHelper.showNotification(context, senderName + " - " + title, message);
-        }, String.class, String.class, String.class, String.class);
+        // Nhận thông báo từ server với dữ liệu bổ sung
+        hubConnection.on("ReceiveNotificationWithData", (title, message, senderId, senderName, orderId, tableId) -> {
+            Log.d(TAG, "Nhận thông báo từ: " + senderName + " - " + title + " - OrderID: " + orderId);
+
+            // Tạo Intent với dữ liệu để mở OrderDetailActivity
+            NotificationHelper.showNotificationWithData(context, senderName + " - " + title, message, orderId, tableId);
+        }, String.class, String.class, String.class, String.class, String.class, String.class);
+
 
 
         hubConnection.onClosed(error -> {
@@ -77,4 +80,12 @@ public class SignalRClient {
             Log.w(TAG, "Chưa kết nối SignalR, không thể gửi phản hồi");
         }
     }
+
+    // Gửi thông báo đến tất cả nhân viên với dữ liệu bổ sung
+    public static void sendToAllStaffWithData(String title, String message, String orderId, String tableId) {
+        if (isConnected()) {
+            hubConnection.send("SendToAllStaffWithData", title, message, orderId, tableId);
+        }
+    }
+
 }
