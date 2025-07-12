@@ -2,7 +2,7 @@ package com.fu.thinh_nguyen.qrfoodorder.data.repository;
 
 import android.util.Log;
 
-import com.fu.thinh_nguyen.qrfoodorder.data.api.table.TableService;
+import com.fu.thinh_nguyen.qrfoodorder.data.api.TableService;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderSearchDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.TableDto;
@@ -42,19 +42,14 @@ public class TableRepository {
         call.enqueue(callback);
     }
 
-    // Option 2: Sử dụng SearchOrder endpoint
     public void getOrdersByTableIdUsingSearch(int tableId, Callback<List<OrderDto>> callback) {
-        Log.d("TableRepository", "Searching orders for tableId: " + tableId);
 
         OrderSearchDto searchDto = new OrderSearchDto();
         searchDto.setTableId(tableId);
-        searchDto.setItems(new ArrayList<>()); // Thêm dòng này
+        searchDto.setCreatedAt("today");
+        searchDto.setItems(new ArrayList<>());
 
         Call<List<OrderDto>> call = tableService.searchOrdersByTable(searchDto);
-
-        // Log request details
-        Log.d("TableRepository", "Request URL: " + call.request().url());
-        Log.d("TableRepository", "Request method: " + call.request().method());
 
         call.enqueue(callback);
     }

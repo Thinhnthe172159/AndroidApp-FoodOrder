@@ -71,7 +71,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         }
 
         public void bind(TableDto table) {
-            tvTableNumber.setText("Bàn " + table.getTableNumber());
+            tvTableNumber.setText(table.getTableNumber());
             tvStatus.setText(getStatusText(table.getStatus()));
 
             // Đổi màu theo trạng thái

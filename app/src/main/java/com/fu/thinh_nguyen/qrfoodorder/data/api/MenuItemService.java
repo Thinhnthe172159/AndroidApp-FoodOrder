@@ -35,10 +35,7 @@ public interface MenuItemService {
     @GET("api/Menu/items/search")
     Call<List<MenuItemDto>> searchMenuItemsByQuery(
             @Query("keyword") String keyword,
-            @Query("categoryId") Integer categoryId,
-            @Query("isAvailable") Boolean isAvailable,
-            @Query("minPrice") Double minPrice,
-            @Query("maxPrice") Double maxPrice
+            @Query("categoryId") Integer categoryId
     );
 
     @Multipart
