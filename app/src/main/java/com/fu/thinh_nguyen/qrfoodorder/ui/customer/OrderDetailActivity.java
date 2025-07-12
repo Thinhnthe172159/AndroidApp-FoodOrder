@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresPermission;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.fu.thinh_nguyen.qrfoodorder.Notification.SignalRClient;
 import com.fu.thinh_nguyen.qrfoodorder.R;
@@ -37,6 +38,7 @@ import retrofit2.Response;
 
 public class OrderDetailActivity extends BaseActivity {
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerOrderItems;
     private ProgressBar progressBar;
 
@@ -56,7 +58,10 @@ public class OrderDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
 
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         recyclerOrderItems = findViewById(R.id.recyclerOrderItems);
+        progressBar = findViewById(R.id.progressBar); // đảm bảo có progressBar trong XML
+
         txtOrderTitle = findViewById(R.id.txtOrderTitle);
         txtOrderAddress = findViewById(R.id.txtOrderAddress);
         txtOrderTime = findViewById(R.id.txtOrderTime);
@@ -64,13 +69,13 @@ public class OrderDetailActivity extends BaseActivity {
         notifyStaffButton = findViewById(R.id.btnNotifyStaff);
         paymentButton = findViewById(R.id.btnCheckout);
 
-        order = (OrderDto) getIntent().getSerializableExtra("ORDER_DTO");
         recyclerOrderItems.setLayoutManager(new LinearLayoutManager(this));
-
         tokenManager = new TokenManager(this);
         orderService = RetrofitClient.getInstance(tokenManager).create(OrderService.class);
 
         orderId = getIntent().getIntExtra("ORDER_ID", -1);
+        order = (OrderDto) getIntent().getSerializableExtra("ORDER_DTO");
+
         if (orderId != -1) {
             fetchOrderDetail(orderId);
         } else {
@@ -79,14 +84,25 @@ public class OrderDetailActivity extends BaseActivity {
         }
 
         notifyStaffButton.setOnClickListener(v -> {
+            if (order == null) return;
+            String title, message;
+
             if (order.getStatus().equalsIgnoreCase(StatusOrder.PendingStatus)) {
-                String title = "Thông báo xác nhận đặt bàn: " + order.getTableName() + " | CODE=PE_" + order.getId() + "/" + order.getTableId();
-                String message = "Khách hàng " + order.getCustomerName() + " vừa đặt bàn " + order.getTableName() + " lúc " + order.getCreatedAt();
-                sendNotificationToStaff(title, message);
-            } else if (order.getStatus().equalsIgnoreCase(StatusOrder.Update)) {
-                String title = "Thông báo cập nhật đơn từ bàn: " + order.getTableName() + " | CODE=UP_" + order.getId() + "/" + order.getTableId();
-                String message = "Khách hàng " + order.getCustomerName() + " vừa cập nhật đơn từ bàn " + order.getTableName();
-                sendNotificationToStaff(title, message);
+                title = "Thông báo xác nhận đặt bàn: " + order.getTableName() + " | CODE=PE_" + order.getId() + "/" + order.getTableId();
+                message = "Khách hàng " + order.getCustomerName() + " vừa đặt bàn " + order.getTableName() + " lúc " + order.getCreatedAt();
+            } else {
+                title = "Thông báo cập nhật đơn từ bàn: " + order.getTableName() + " | CODE=UP_" + order.getId() + "/" + order.getTableId();
+                message = "Khách hàng " + order.getCustomerName() + " vừa cập nhật đơn từ bàn " + order.getTableName();
+            }
+
+            sendNotificationToStaff(title, message);
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if (orderId != -1) {
+                fetchOrderDetail(orderId);
+            } else {
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -94,12 +110,16 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void fetchOrderDetail(int orderId) {
-        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+        if (!swipeRefreshLayout.isRefreshing() && progressBar != null)
+            progressBar.setVisibility(View.VISIBLE);
+
+        swipeRefreshLayout.setRefreshing(true);
 
         orderService.getOrderById(orderId).enqueue(new Callback<OrderDto>() {
             @Override
             public void onResponse(Call<OrderDto> call, Response<OrderDto> response) {
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
 
                 if (response.isSuccessful() && response.body() != null) {
                     order = response.body();
@@ -112,28 +132,24 @@ public class OrderDetailActivity extends BaseActivity {
                         notifyStaffButton.setVisibility(View.GONE);
                         paymentButton.setVisibility(View.GONE);
                         totalPrice.setText("Chưa chọn món");
+                    } else if (order.getStatus().equalsIgnoreCase(StatusOrder.PaidStatus)
+                            || order.getStatus().equalsIgnoreCase(StatusOrder.CancelledStatus)) {
+                        notifyStaffButton.setVisibility(View.GONE);
+                        paymentButton.setVisibility(View.GONE);
+                        totalPrice.setVisibility(View.GONE);
                     } else {
-                        // Logic trạng thái paid / cancelled
-                        if (order.getStatus().equalsIgnoreCase(StatusOrder.PaidStatus) ||
-                                order.getStatus().equalsIgnoreCase(StatusOrder.CancelledStatus)) {
-                            notifyStaffButton.setVisibility(View.GONE);
-                            paymentButton.setVisibility(View.GONE);
-                            totalPrice.setVisibility(View.GONE);
+                        totalPrice.setVisibility(View.VISIBLE);
+                        totalPrice.setText(formatVND(order.getTotalAmount()));
+                        paymentButton.setVisibility(View.VISIBLE);
+
+                        if (order.getStatus().equalsIgnoreCase(StatusOrder.PendingStatus)) {
+                            notifyStaffButton.setVisibility(View.VISIBLE);
+                            notifyStaffButton.setText("Gửi menu");
+                        } else if (order.getStatus().equalsIgnoreCase(StatusOrder.Update)) {
+                            notifyStaffButton.setVisibility(View.VISIBLE);
+                            notifyStaffButton.setText("Cập nhật menu");
                         } else {
-                            totalPrice.setVisibility(View.VISIBLE);
-                            totalPrice.setText(formatVND(order.getTotalAmount()));
-
-                            paymentButton.setVisibility(View.VISIBLE);
-
-                            if (order.getStatus().equalsIgnoreCase(StatusOrder.PendingStatus)) {
-                                notifyStaffButton.setVisibility(View.VISIBLE);
-                                notifyStaffButton.setText("Gửi menu");
-                            } else if (order.getStatus().equalsIgnoreCase(StatusOrder.Update)) {
-                                notifyStaffButton.setVisibility(View.VISIBLE);
-                                notifyStaffButton.setText("Cập nhật menu");
-                            } else {
-                                notifyStaffButton.setVisibility(View.GONE);
-                            }
+                            notifyStaffButton.setVisibility(View.GONE);
                         }
                     }
 
@@ -153,6 +169,7 @@ public class OrderDetailActivity extends BaseActivity {
             @Override
             public void onFailure(Call<OrderDto> call, Throwable t) {
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(OrderDetailActivity.this, "Lỗi kết nối máy chủ", Toast.LENGTH_SHORT).show();
                 Log.e("OrderDetail", "Error: " + t.getMessage());
             }
@@ -161,7 +178,7 @@ public class OrderDetailActivity extends BaseActivity {
 
     private void displayOrderItems(List<OrderItemDto> items) {
         OrderItemAdapter2 adapter = new OrderItemAdapter2(orderId, items, this, tokenManager,
-                () -> fetchOrderDetail(orderId)); // Lambda đúng
+                () -> fetchOrderDetail(orderId));
         recyclerOrderItems.setAdapter(adapter);
     }
 
@@ -191,7 +208,7 @@ public class OrderDetailActivity extends BaseActivity {
             @Override
             public void onFinish() {
                 notifyStaffButton.setEnabled(true);
-                notifyStaffButton.setText("Gửi yêu cầu xác nhận");
+                notifyStaffButton.setText("Gửi menu");
 
                 getSharedPreferences("order_prefs", MODE_PRIVATE)
                         .edit()
