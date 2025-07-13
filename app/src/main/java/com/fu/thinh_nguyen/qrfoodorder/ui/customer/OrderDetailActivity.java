@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresPermission;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.fu.thinh_nguyen.qrfoodorder.Notification.SignalRClient;
 import com.fu.thinh_nguyen.qrfoodorder.R;
@@ -39,6 +40,7 @@ public class OrderDetailActivity extends BaseActivity {
 
     private RecyclerView recyclerOrderItems;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private TextView txtOrderTitle, txtOrderAddress, txtOrderTime, totalPrice;
     private Button notifyStaffButton, paymentButton;
@@ -58,6 +60,7 @@ public class OrderDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_order_detail);
 
         // Ánh xạ view
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         recyclerOrderItems = findViewById(R.id.recyclerOrderItems);
         txtOrderTitle = findViewById(R.id.txtOrderTitle);
         txtOrderAddress = findViewById(R.id.txtOrderAddress);
@@ -123,10 +126,18 @@ public class OrderDetailActivity extends BaseActivity {
         paymentButton.setOnClickListener(v -> {
             showPaymentOptions();
         });
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if (orderId != -1) {
+                fetchOrderDetail(orderId);
+            } else {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void showPaymentOptions() {
-        String[] options = {"Thanh toán COD", "Quét mã QR", "Dùng cổng thanh toán"};
+        String[] options = {"Thanh toán COD", "Dùng cổng thanh toán"};
 
         new androidx.appcompat.app.AlertDialog.Builder(OrderDetailActivity.this)
                 .setTitle("Chọn phương thức thanh toán")
@@ -135,10 +146,7 @@ public class OrderDetailActivity extends BaseActivity {
                         case 0: // COD
                             sendPaymentNotifyToStaff("COD");
                             break;
-                        case 1: // QR
-                            sendPaymentNotifyToStaff("QR Code");
-                            break;
-                        case 2: // Gateway
+                        case 1: // Gateway
                             openPaymentGateway(); // Sang màn hình khác
                             break;
                     }
@@ -177,6 +185,7 @@ public class OrderDetailActivity extends BaseActivity {
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
 
                 if (response.isSuccessful() && response.body() != null) {
+                    swipeRefreshLayout.setRefreshing(false);
                     OrderDto order = response.body();
 
                     // Cập nhật giao diện
@@ -187,6 +196,7 @@ public class OrderDetailActivity extends BaseActivity {
 
                     displayOrderItems(order.getItems());
                 } else {
+                    swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(OrderDetailActivity.this, "Không thể tải chi tiết đơn hàng", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -241,7 +251,7 @@ public class OrderDetailActivity extends BaseActivity {
     private void startCountdown(long millisLeft) {
         notifyStaffButton.setEnabled(false);
 
-        countDownTimer = new CountDownTimer(millisLeft, 1000) {
+        countDownTimer = new CountDownTimer(millisLeft, 60000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 int secondsLeft = (int) (millisUntilFinished / 1000);
@@ -251,7 +261,7 @@ public class OrderDetailActivity extends BaseActivity {
             @Override
             public void onFinish() {
                 notifyStaffButton.setEnabled(true);
-                notifyStaffButton.setText("Gửi yêu cầu xác nhận");
+                notifyStaffButton.setText("Gửi lại yêu cầu");
 
                 // Xoá thời điểm cũ để không đếm lại nữa
                 getSharedPreferences("order_prefs", MODE_PRIVATE)

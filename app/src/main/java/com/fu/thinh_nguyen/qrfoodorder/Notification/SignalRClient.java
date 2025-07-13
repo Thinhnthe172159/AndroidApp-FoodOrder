@@ -36,6 +36,11 @@ public class SignalRClient {
             NotificationHelper.showNotificationWithData(context, senderName + " - " + title, message, orderId, tableId);
         }, String.class, String.class, String.class, String.class, String.class, String.class);
 
+        hubConnection.on("ReceiveNotification", (title, message, senderId, senderName) -> {
+            Log.d(TAG, "Nhận thông báo từ: " + senderName + " - " + title);
+            NotificationHelper.showNotification(context, senderName + " - " + title, message);
+        }, String.class, String.class, String.class, String.class);
+
 
 
         hubConnection.onClosed(error -> {
