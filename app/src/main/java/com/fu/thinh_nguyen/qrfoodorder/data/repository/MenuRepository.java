@@ -39,13 +39,8 @@ public class MenuRepository {
         call.enqueue(callback);
     }
 
-    public void searchMenuItemsByQuery(String keyword, Integer categoryId, Boolean isAvailable,
-                                       BigDecimal minPrice, BigDecimal maxPrice, Callback<List<MenuItemDto>> callback) {
-        Call<List<MenuItemDto>> call = menuItemService.searchMenuItemsByQuery(
-                keyword, categoryId, isAvailable,
-                minPrice != null ? minPrice.doubleValue() : null,
-                maxPrice != null ? maxPrice.doubleValue() : null
-        );
+    public void searchMenuItemsByQuery(String keyword, Integer categoryId, Callback<List<MenuItemDto>> callback) {
+        Call<List<MenuItemDto>> call = menuItemService.searchMenuItemsByQuery(keyword, categoryId);
         call.enqueue(callback);
     }
 

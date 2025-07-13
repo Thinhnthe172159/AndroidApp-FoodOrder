@@ -23,9 +23,8 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
     private OnOrderClickListener onOrderClickListener;
 
     public interface OnOrderClickListener {
-        void onOrderClick(OrderDto order);
-        void onConfirmOrder(int orderId); // Xác nhận đơn hàng (pending/update -> preparing)
-        void onPayment(OrderDto order);      // Thanh toán (preparing -> paid)
+        void onConfirmOrder(int orderId);
+        void onPayment(int orderId);
     }
 
     public OrderTableAdapter(Context context, List<OrderDto> orderList) {
@@ -93,13 +92,6 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
             rvOrderItems.setLayoutManager(new LinearLayoutManager(context));
             orderItemAdapter = new OrderItemAdapter(context);
             rvOrderItems.setAdapter(orderItemAdapter);
-
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && onOrderClickListener != null) {
-                    onOrderClickListener.onOrderClick(orderList.get(position));
-                }
-            });
         }
 
         public void bind(OrderDto order) {
@@ -185,23 +177,20 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
                 case "preparing":
                     // Hiển thị button "Thanh toán"
                     btnPayment.setVisibility(View.VISIBLE);
-                    btnPayment.setText("Thanh toán");
+                    btnPayment.setText("Xác nhận thanh toán");
                     btnPayment.setBackgroundColor(getButtonColor(status));
                     btnPayment.setOnClickListener(v -> {
                         if (onOrderClickListener != null) {
-                            onOrderClickListener.onPayment(order);
+                            onOrderClickListener.onPayment(order.getId());
                         }
                     });
                     break;
 
                 case "cancelled":
                 case "paid":
-                    // Ẩn button
                     btnPayment.setVisibility(View.GONE);
                     break;
-
                 default:
-                    // Các trạng thái khác (ready, etc.) - ẩn button
                     btnPayment.setVisibility(View.GONE);
                     break;
             }
@@ -216,7 +205,7 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
                 Date date = inputFormat.parse(dateString);
                 return outputFormat.format(date);
             } catch (Exception e) {
-                return dateString; // Return original if parsing fails
+                return dateString;
             }
         }
 
@@ -224,10 +213,10 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
             if (status == null) return "Không xác định";
 
             switch (status.toLowerCase()) {
-                case "pending": return "Chờ xử lý";
-                case "preparing": return "Đang chuẩn bị";
+                case "pending": return "Chờ xử lý đơn";
+                case "preparing": return "Đang chuẩn bị đơn";
                 case "update": return "Cập nhật món";
-                case "cancelled": return "Đã hủy";
+                case "cancelled": return "Đã hủy đơn";
                 case "paid": return "Đã thanh toán";
                 default: return status;
             }
@@ -243,8 +232,6 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
                     return context.getResources().getColor(android.R.color.holo_blue_light);
                 case "update":
                     return context.getResources().getColor(android.R.color.holo_purple);
-                case "ready":
-                    return context.getResources().getColor(android.R.color.holo_green_light);
                 case "paid":
                     return context.getResources().getColor(android.R.color.holo_green_dark);
                 case "cancelled":

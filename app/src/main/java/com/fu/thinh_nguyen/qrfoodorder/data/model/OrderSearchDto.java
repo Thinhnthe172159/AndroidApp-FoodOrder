@@ -7,7 +7,8 @@ public class OrderSearchDto {
     private String customerName;
     private Integer tableId;
     private String status;
-    private List<OrderItemDto> items; // Thêm field này
+    private String createdAt;
+    private List<OrderItemDto> items;
 
     // Constructors
     public OrderSearchDto() {}
@@ -29,7 +30,14 @@ public class OrderSearchDto {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    // Thêm getter/setter cho Items
+    public String getCreatedAt() {
+        return createdAt;
+    }
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+
     public List<OrderItemDto> getItems() { return items; }
     public void setItems(List<OrderItemDto> items) { this.items = items; }
 }
