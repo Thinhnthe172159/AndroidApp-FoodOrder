@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity{
     private TokenManager tokenManager;
     private ApiService api;
 
+    private TextView tvForgotPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class LoginActivity extends AppCompatActivity{
         edtUser = findViewById(R.id.edtUsername);
         edtPass = findViewById(R.id.edtPassword);
         btnBack = findViewById(R.id.btnBack);
+        tvForgotPassword = findViewById(R.id.tvForgotPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
 
         tokenManager = new TokenManager(this);
@@ -57,6 +60,11 @@ public class LoginActivity extends AppCompatActivity{
             startActivity(intent);
             finish(); // Optional: close LoginActivity so it's not in back stack
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right); // Optional animation
+        });
+        tvForgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
         ViewPassword();
     }

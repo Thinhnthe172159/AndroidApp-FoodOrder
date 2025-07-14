@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.api.ApiService;
-import com.fu.thinh_nguyen.qrfoodorder.data.model.AuthResponseDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.RegisterDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.UserDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.network.RetrofitClient;
