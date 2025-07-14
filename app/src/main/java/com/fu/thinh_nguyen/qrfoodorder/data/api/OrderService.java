@@ -70,4 +70,7 @@ public interface OrderService {
             @Path("orderId") int orderId,
             @Path("itemId") int itemId
     );
+
+    @GET("api/order/CheckPaid/{id}")
+    Call<String> checkPaid(@Path("id") int orderId);
 }

@@ -124,11 +124,37 @@ public class OrderDetailActivity extends BaseActivity {
 
 
         paymentButton.setOnClickListener(v -> {
-            // cal api check payment
+            // Gọi API check payment
+            orderService.checkPaid(orderId).enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.d("OrderDetail", "CheckPaid Response: " + response.body());
+                    Log.d("OrderDetail", "CheckPaid Response Code: " + response.code());
 
+                    if (response.isSuccessful()) {
+                        Toast.makeText(OrderDetailActivity.this, "Đơn đã được thanh toán!", Toast.LENGTH_SHORT).show();
 
-            showPaymentOptions();
+                        // Làm mới giao diện
+                        swipeRefreshLayout.setRefreshing(true);
+                        fetchOrderDetail(orderId);
+                    } else {
+                        // Chưa thanh toán, cho phép chọn hình thức
+                        Toast.makeText(OrderDetailActivity.this, "Đơn chưa được thanh toán", Toast.LENGTH_SHORT).show();
+                        showPaymentOptions();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    swipeRefreshLayout.setRefreshing(true);
+                    new android.os.Handler().postDelayed(() -> {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }, 1000);
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
         });
+
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             if (orderId != -1) {
@@ -173,6 +199,7 @@ public class OrderDetailActivity extends BaseActivity {
     private void openPaymentGateway() {
         Intent intent = new Intent(this, PaymentGate.class);
         intent.putExtra("ORDER_ID", order.getId());
+        intent.putExtra("ORDER_DTO",order);
         startActivity(intent);
     }
 
@@ -248,7 +275,7 @@ public class OrderDetailActivity extends BaseActivity {
                 .putLong("last_notify_time_" + orderId, now)
                 .apply();
 
-        startCountdown(1000); // 60s
+        startCountdown(60000); // 60s
     }
 
     private void startCountdown(long millisLeft) {

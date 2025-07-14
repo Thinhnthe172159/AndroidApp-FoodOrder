@@ -1,5 +1,7 @@
 package com.fu.thinh_nguyen.qrfoodorder.ui.adapter;
 
+import static com.fu.thinh_nguyen.qrfoodorder.Notification.SignalRClient.replyToCustomer;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.fu.thinh_nguyen.qrfoodorder.R;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderDto;
+import com.fu.thinh_nguyen.qrfoodorder.data.prefs.TokenManager;
+
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -154,6 +158,7 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
         }
 
         private void setupPaymentButton(OrderDto order) {
+            TokenManager tok = new TokenManager(context);
             String status = order.getStatus();
             if (status == null) {
                 btnPayment.setVisibility(View.GONE);
@@ -170,6 +175,7 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
                     btnPayment.setOnClickListener(v -> {
                         if (onOrderClickListener != null) {
                             onOrderClickListener.onConfirmOrder(order.getId());
+                            replyToCustomer(order.getCustomerId()+"","Xác nhận đơn đặt","Đơn đặt bàn của bạn đã được ghi nhận",tok.getUserId(),tok.getUserName());
                         }
                     });
                     break;
@@ -182,6 +188,7 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Or
                     btnPayment.setOnClickListener(v -> {
                         if (onOrderClickListener != null) {
                             onOrderClickListener.onPayment(order.getId());
+                            replyToCustomer(order.getCustomerId()+"","Xác nhận đơn đặt","Đơn đặt bàn của bạn đã được ghi nhận",tok.getUserId(),tok.getUserName());
                         }
                     });
                     break;
