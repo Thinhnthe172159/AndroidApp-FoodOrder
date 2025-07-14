@@ -9,6 +9,7 @@ import com.fu.thinh_nguyen.qrfoodorder.data.model.MenuSearchFilter;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.OrderIdRequest;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.PayOSResponse;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.RegisterDto;
+import com.fu.thinh_nguyen.qrfoodorder.data.model.ResetPasswordDto;
 import com.fu.thinh_nguyen.qrfoodorder.data.model.UserDto;
 
 import java.util.List;
@@ -38,6 +39,9 @@ public interface ApiService {
 
     @POST("api/Payment/payos")
     Call<PayOSResponse> getPayOSCheckoutUrl(@Query("orderId") int orderId);
+
+    @POST("api/Auth/reset-password/confirm")
+    Call<Void> ResetPassword(@Body ResetPasswordDto dto);
 
 
 }
