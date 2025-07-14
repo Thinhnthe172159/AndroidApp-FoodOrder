@@ -124,6 +124,9 @@ public class OrderDetailActivity extends BaseActivity {
 
 
         paymentButton.setOnClickListener(v -> {
+            // cal api check payment
+
+
             showPaymentOptions();
         });
 
